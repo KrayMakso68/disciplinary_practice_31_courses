@@ -5,16 +5,12 @@ from .models import CustomUser
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = CustomUser
-        fields = (
-            'username', 'password', 'is_active', 'role', 'first_name', 'last_name',
-            'rang', 'platoon', 'group', 'unit'
-        )
+        fields = "__all__"
 
 
-# class CustomUserChangeForm(UserChangeForm):
-#
-#     class Meta:
-#         model = CustomUser
-#         fields = ("email",)
+class CustomUserChangeForm(UserChangeForm):
+    class Meta:
+        model = CustomUser
+        fields = "__all__"
 
 # https://testdriven.io/blog/django-custom-user-model/
