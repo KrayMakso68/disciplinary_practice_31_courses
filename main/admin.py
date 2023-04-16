@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CustomUser
+from .models import CustomUser, Note
 from django.contrib.auth.admin import UserAdmin
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 
@@ -8,23 +8,35 @@ class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = CustomUser
-    list_display = ("username", "role", "rang", "last_name", "first_name", "is_active",)
-    list_filter = ("username", "role", "rang", "last_name", "first_name", "is_active",)
+    list_display = ("username", "role", "rang", "last_name", "first_name", "surname", "group", "is_active",)
+    list_filter = ("role", "rang", "platoon", "group", "unit", "is_active",)
     fieldsets = (
-        (None, {"fields": ("last_name", "first_name", "password")}),
-        ("Permissions", {"fields": ("is_staff", "is_active", "groups", "user_permissions")}),
+        ("О пользователе", {"fields": ("rang", "last_name", "first_name", "surname", "role", "password")}),
+        ("Подразделение", {"fields": ("platoon", "group", "unit")}),
+        ("Разрешения и группы", {"fields": ("is_active", "groups", "user_permissions")}),
     )
     add_fieldsets = (
-        (None, {
+        ('Логин и Пароль', {
             "classes": ("wide",),
             "fields": (
-                "email", "password1", "password2", "is_staff",
-                "is_active", "groups", "user_permissions"
+                "username", "password1", "password2", "is_active",
+            )}
+         ),
+        ('О пользователе', {
+            "classes": ("wide",),
+            "fields": (
+                "rang", "last_name", "first_name", "surname", "role",
+            )}
+         ),
+        ('Подразделение', {
+            "classes": ("wide",),
+            "fields": (
+                "platoon", "group", "unit",
             )}
          ),
     )
-    search_fields = ("email",)
-    ordering = ("email",)
+    ordering = ("group",)
 
 
 admin.site.register(CustomUser, CustomUserAdmin)
+admin.site.register(Note)

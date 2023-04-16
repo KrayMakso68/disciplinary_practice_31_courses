@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from disciplinary_practice import settings
 
 
 class CustomUser(AbstractUser):
@@ -51,7 +52,30 @@ class CustomUser(AbstractUser):
     role = models.PositiveSmallIntegerField('Должность', choices=ROLE_CHOICES, blank=True, null=True)
     first_name = models.CharField('Имя', max_length=50, blank=True, null=True)
     last_name = models.CharField('Фамилия', max_length=50, blank=True, null=True)
+    surname = models.CharField('Отчество', max_length=50, blank=True, null=True)
     rang = models.CharField('Воинское звание', choices=RANG_CHOICES, max_length=50, blank=True, null=True)
     platoon = models.PositiveSmallIntegerField('Взвод', choices=PLATOON_CHOICES, blank=True, null=True)
     group = models.IntegerField('Номер группы', choices=GROUP_CHOICES, blank=True, null=True)
     unit = models.PositiveSmallIntegerField('Отделение', choices=UNIT_CHOICES, blank=True, null=True)
+
+
+class Note(models.Model):
+    TYPENOTE_CHOICES = (
+        (1, 'Поощрение'),
+        (2, 'Взыскание'),
+        (3, 'Снятие ранее применённого взыскания'),
+    )
+    cadet = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    type = models.PositiveSmallIntegerField('Вид записи', choices=TYPENOTE_CHOICES)
+    who_gave = models.CharField('Кем дано', max_length=150)
+    text = models.TextField('Текст записи')
+    date = models.DateField('Дата')
+    check_active = models.BooleanField('Активно', default=True)
+
+    def __str__(self):
+        return self.cadet.last_name + ' ' + self.cadet.first_name[0] + '.' + self.cadet.surname[0] + '.' + ' | ' + \
+               self.TYPENOTE_CHOICES[self.type - 1][1]
+
+    class Meta:
+        verbose_name = 'Запись'
+        verbose_name_plural = 'Записи'
