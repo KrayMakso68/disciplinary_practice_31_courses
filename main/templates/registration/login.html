@@ -1,0 +1,38 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Signin Template · Bootstrap v5.0</title>
+    <link rel="stylesheet" href="{% static 'main/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/login.css' %}">
+
+</head>
+<body class="text-center">
+<main class="form-signin">
+    <form method="post" class="shadow">
+        {% csrf_token %}
+        <div class="m-5 py-3">
+            <img class="mb-4 mt-3" src="{% static 'main/img/e1470_fso.png' %}" alt="" height="100">
+            <h1 class="h2 mb-3 fw-normal ">Вход в систему</h1>
+            <div>
+            <div class="form-floating mb-1">
+                {{ form.username }}
+                <label class="text-muted" for="{{ form.username.id_for_label }}">Логин</label>
+            </div>
+            <div class="form-floating">
+                {{ form.password }}
+                <label class="text-muted" for="{{ form.password.id_for_label }}">Пароль</label>
+            </div>
+
+            <button class="w-100 btn btn-lg btn-primary mt-4" type="submit">Войти</button>
+            <p class="mt-5 mb-3 text-muted fw-light">Академия ФСО России</p>
+        </div>
+    </form>
+</main>
+
+
+</body>
+</html>
