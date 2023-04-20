@@ -24,11 +24,14 @@
             </div>
             <div class="form-floating">
                 {{ form.password }}
+                {{ form.password.errors }}
                 <label class="text-muted" for="{{ form.password.id_for_label }}">Пароль</label>
             </div>
 
             <button class="w-100 btn btn-lg btn-primary mt-4" type="submit">Войти</button>
             <p class="mt-5 mb-3 text-muted fw-light">Академия ФСО России</p>
+            {{ form.username.errors }}
+                {{ form.non_field_errors }}
         </div>
     </form>
 </main>

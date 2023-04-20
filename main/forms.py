@@ -21,7 +21,7 @@ class UserLoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super(UserLoginForm, self).__init__(*args, **kwargs)
 
-    username = UsernameField(widget=forms.TextInput(
+    username = UsernameField(required=True, widget=forms.TextInput(
         attrs={
             'type': 'text',
             'class': 'form-control',
@@ -29,7 +29,7 @@ class UserLoginForm(AuthenticationForm):
             'id': 'floatingInput'
         }
     ))
-    password = forms.CharField(widget=forms.PasswordInput(
+    password = forms.CharField(required=True, widget=forms.PasswordInput(
         attrs={
             'type': 'password',
             'class': 'form-control',
@@ -37,6 +37,10 @@ class UserLoginForm(AuthenticationForm):
             'id': 'floatingPassword',
         }
     ))
+    error_messages = {
+        "invalid_login": "Ah, ah, ah. You didn't say the magic word!",
+        "inactive": "Permission denied",
+    }
 
 # https://stackoverflow.com/questions/55369645/how-to-customize-default-auth-login-form-in-django
 # https://pytutorial.com/loginview-django-example/
