@@ -58,6 +58,9 @@ class CustomUser(AbstractUser):
     group = models.IntegerField('Номер группы', choices=GROUP_CHOICES, blank=True, null=True)
     unit = models.PositiveSmallIntegerField('Отделение', choices=UNIT_CHOICES, blank=True, null=True)
 
+    def get_FIO(self):
+        return str(self.last_name) + ' ' + str(self.first_name[0].upper()) + '.' + str(self.surname[0].upper()) + '.'
+
 
 class Note(models.Model):
     TYPENOTE_CHOICES = (

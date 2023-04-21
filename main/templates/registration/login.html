@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Signin Template · Bootstrap v5.0</title>
+    <title>Вход</title>
     <link rel="stylesheet" href="{% static 'main/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'main/css/login.css' %}">
 
@@ -18,21 +18,27 @@
             <img class="mb-4 mt-3" src="{% static 'main/img/e1470_fso.png' %}" alt="" height="100">
             <h1 class="h2 mb-3 fw-normal ">Вход в систему</h1>
             <div>
-            <div class="form-floating mb-1">
-                {{ form.username }}
-                <label class="text-muted" for="{{ form.username.id_for_label }}">Логин</label>
-            </div>
-            <div class="form-floating">
-                {{ form.password }}
-                {{ form.password.errors }}
-                <label class="text-muted" for="{{ form.password.id_for_label }}">Пароль</label>
-            </div>
+                <div class="form-floating mb-1">
+                    {{ form.username }}
+                    <label class="text-muted" for="{{ form.username.id_for_label }}">Логин</label>
+                </div>
+                <div class="form-floating">
+                    {{ form.password }}
+                    <label class="text-muted" for="{{ form.password.id_for_label }}">Пароль</label>
+                </div>
+                {% if form.non_field_errors %}
+                <div class="alert alert-danger" role="alert">
+                    {% for error in form.non_field_errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+                {% else %}
+                    <div class="cor"></div>
+                {% endif %}
+                <button class="w-100 btn btn-lg btn-primary" type="submit">Войти</button>
+                <p class="mt-5 mb-3 text-muted fw-light">Академия ФСО России</p>
 
-            <button class="w-100 btn btn-lg btn-primary mt-4" type="submit">Войти</button>
-            <p class="mt-5 mb-3 text-muted fw-light">Академия ФСО России</p>
-            {{ form.username.errors }}
-                {{ form.non_field_errors }}
-        </div>
+            </div>
     </form>
 </main>
 

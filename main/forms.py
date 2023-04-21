@@ -38,7 +38,7 @@ class UserLoginForm(AuthenticationForm):
         }
     ))
     error_messages = {
-        "invalid_login": "Ah, ah, ah. You didn't say the magic word!",
+        "invalid_login": "Неверный логин или пароль",
         "inactive": "Permission denied",
     }
 

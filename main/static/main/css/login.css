@@ -11,6 +11,17 @@ body {
   background: #e8ebeb;
 }
 
+.alert {
+  margin-bottom: 11px;
+  height: 32px;
+  line-height:30px;
+  padding: 0px 15px;
+}
+
+.cor {
+  height: 43px;
+}
+
 .form-signin {
   width: 100%;
   max-width: 400px;
