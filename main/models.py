@@ -68,9 +68,9 @@ class Note(models.Model):
         (2, 'Взыскание'),
         (3, 'Снятие ранее применённого взыскания'),
     )
-    cadet = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    cadet = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='note_for_cadet')
     type = models.PositiveSmallIntegerField('Вид записи', choices=TYPENOTE_CHOICES)
-    who_gave = models.CharField('Кем дано', max_length=150)
+    who_gave = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='note_who_gave')
     text = models.TextField('Текст записи')
     date = models.DateField('Дата')
     check_active = models.BooleanField('Активно', default=True)
