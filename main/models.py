@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from disciplinary_practice import settings
+from pytils.translit import slugify
+from uuid import uuid4
 
 
 class CustomUser(AbstractUser):
@@ -59,26 +61,34 @@ class CustomUser(AbstractUser):
     unit = models.PositiveSmallIntegerField('Отделение', choices=UNIT_CHOICES, blank=True, null=True)
 
     def get_FIO(self):
-        return str(self.last_name) + ' ' + str(self.first_name[0].upper()) + '.' + str(self.surname[0].upper()) + '.'
-
+        if self.last_name:
+            return str(self.rang) + ' ' + str(self.last_name) + ' ' + str(self.first_name[0].upper()) + '.' + str(self.surname[0].upper()) + '.'
+        else:
+            return "'unknown'"
 
 class Note(models.Model):
     TYPENOTE_CHOICES = (
-        (1, 'Поощрение'),
-        (2, 'Взыскание'),
-        (3, 'Снятие ранее применённого взыскания'),
+        ('Поощрение', 'Поощрение'),
+        ('Взыскание', 'Взыскание'),
+        ('Снятие ранее применённого взыскания', 'Снятие ранее применённого взыскания'),
     )
-    cadet = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='note_for_cadet')
-    type = models.PositiveSmallIntegerField('Вид записи', choices=TYPENOTE_CHOICES)
-    who_gave = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='note_who_gave')
+    cadet = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='note_for_cadet', verbose_name='Кому')
+    type = models.CharField('Вид записи', choices=TYPENOTE_CHOICES, max_length=40)
+    who_gave = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='note_who_gave', verbose_name='Кем дано')
     text = models.TextField('Текст записи')
     date = models.DateField('Дата')
     check_active = models.BooleanField('Активно', default=True)
+    slug = models.SlugField(max_length=255, unique=True, db_index=True, blank=True)
 
     def __str__(self):
-        return self.cadet.last_name + ' ' + self.cadet.first_name[0] + '.' + self.cadet.surname[0] + '.' + ' | ' + \
-               self.TYPENOTE_CHOICES[self.type - 1][1]
+        return self.cadet.last_name + ' ' + self.cadet.first_name[0] + '.' + self.cadet.surname[0] + '.' + ' | ' + self.type
 
     class Meta:
         verbose_name = 'Запись'
         verbose_name_plural = 'Записи'
+
+    def save(self, **kwargs):
+        super(Note, self).save()
+        if not self.slug:
+            self.slug = slugify(self.type) + '-' + slugify(self.text) + '-' + uuid4().hex[:8]
+            super(Note, self).save()

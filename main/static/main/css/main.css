@@ -112,3 +112,12 @@ body {
 /*  border-color: transparent;*/
 /*  box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);*/
 /*}*/
+
+.btn-circle.btn-sm {
+  width: 45px;
+  height: 45px;
+  padding: 0px 12px;
+  border-radius: 60px;
+  font-size: 20px;
+  text-align: center;
+}

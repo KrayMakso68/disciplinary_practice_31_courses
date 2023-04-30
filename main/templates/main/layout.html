@@ -15,7 +15,7 @@
   <body>
 
   <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-      <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 text-start">Дисциплинарная практика<br>31 курса</a>
+      <a href="{% url 'home' %}" class="navbar-brand col-md-3 col-lg-2 me-0 px-3 text-start">Дисциплинарная практика<br>31 курса</a>
       <div class="navbar-nav">
           <div class="row row-cols-2 mx-2 gx-5">
               <div class="nav-item text-nowrap">
@@ -42,7 +42,7 @@
                   <ul class="nav flex-column">
                       {% if request.user.role == 1 or request.user.role == 2 or request.user.role == 3 %}
                       <li class="nav-item">
-                          <a class="nav-link active" aria-current="page" href="#">
+                          <a class="nav-link active" aria-current="page" href="{% url 'view_my_notes' %}">
                               <span data-feather="file-text"></span>
                               Мои записи
                           </a>

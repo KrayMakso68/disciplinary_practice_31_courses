@@ -1,0 +1,41 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+
+{% block title %}
+    Мои записи
+{% endblock %}
+
+
+{% block content %}
+    <h2 class="mt-4 ms-2"><a href="{% url 'home' %}"><button class="btn btn-outline-secondary btn-circle btn-sm mb-2 me-3"><</button></a>Мои записи</h2>
+    {% if user_notes %}
+    <div class="table-responsive mt-5 me-5">
+        <table class="table table-striped">
+            <thead class="table-dark">
+            <tr>
+                <th scope="col">№</th>
+                <th scope="col">Запись</th>
+                <th scope="col">Кем дано</th>
+                <th scope="col">Дата</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for note in user_notes %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ note.type }}</td>
+                    <td>{{ note.who_gave.get_FIO }}</td>
+                    <td>{{ note.date|date:"d.m.Y" }}</td>
+                    <td><a class="btn btn-sm btn-warning" href="{% url 'user_note_detail' slug=note.slug %}">Подробнее</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <div class="alert alert-warning text-center mt-4 mx-5" role="alert">
+            <h4 class="mt-1">У вас нет записей</h4>
+        </div>
+    {% endif %}
+{% endblock %}
