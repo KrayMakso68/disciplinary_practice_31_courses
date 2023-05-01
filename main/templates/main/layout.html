@@ -48,11 +48,32 @@
                           </a>
                       </li>
                       {% endif %}
-                      {% if request.user.role == 2 or request.user.role == 3 or request.user.role == 4 or request.user.role == 5 or request.user.role == 6 %}
+                      {% if request.user.role == 2 %}
+                      <li class="nav-item">
+                          <a class="nav-link active" aria-current="page" href="{% url 'unit' group=314 unit=2 %}">
+                              <span data-feather="users"></span>
+                              {{ request.user.unit }} отделение {{ request.user.group }} гр.
+                          </a>
+                      </li>
+                      {% elif request.user.role == 3 %}
                       <li class="nav-item">
                           <a class="nav-link active" aria-current="page" href="#">
                               <span data-feather="users"></span>
-                              Моё подразделение
+                              {{ request.user.group }} учебная группа
+                          </a>
+                      </li>
+                      {% elif request.user.role == 4 %}
+                      <li class="nav-item">
+                          <a class="nav-link active" aria-current="page" href="#">
+                              <span data-feather="users"></span>
+                              {{ request.user.platoon }} взвод
+                          </a>
+                      </li>
+                      {% elif request.user.role == 5 or request.user.role == 6 %}
+                      <li class="nav-item">
+                          <a class="nav-link active" aria-current="page" href="#">
+                              <span data-feather="users"></span>
+                              31 курс
                           </a>
                       </li>
                       {% endif %}

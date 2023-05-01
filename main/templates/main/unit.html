@@ -1,0 +1,20 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+
+{% block title %}
+    Запись
+{% endblock %}
+
+
+{% block content %}
+    <h2 class="mt-4 ms-2"><a onclick="history.back();"><button class="btn btn-outline-secondary btn-circle btn-sm mb-2 me-3"><</button></a>Запись</h2>
+    <div class="container">
+        {% for cadet in cadets_in_unit %}
+        <div class="row justify-content-center">
+            <div class="col-7">
+                {{ cadet }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

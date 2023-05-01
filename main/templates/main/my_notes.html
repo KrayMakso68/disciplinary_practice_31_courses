@@ -7,9 +7,9 @@
 
 
 {% block content %}
-    <h2 class="mt-4 ms-2"><a href="{% url 'home' %}"><button class="btn btn-outline-secondary btn-circle btn-sm mb-2 me-3"><</button></a>Мои записи</h2>
+    <h2 class="mt-4 ms-2"><a onclick="history.back();"><button class="btn btn-outline-secondary btn-circle btn-sm mb-2 me-3"><</button></a>Мои записи</h2>
     {% if user_notes %}
-    <div class="table-responsive mt-5 me-5">
+    <div class="table-responsive mt-5 mx-5">
         <table class="table table-striped">
             <thead class="table-dark">
             <tr>

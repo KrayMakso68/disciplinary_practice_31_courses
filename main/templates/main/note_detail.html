@@ -7,38 +7,43 @@
 
 
 {% block content %}
-    <h2 class="mt-4 ms-2"><a href="{% url 'view_my_notes' %}"><button class="btn btn-outline-secondary btn-circle btn-sm mb-2 me-3"><</button></a>Запись</h2>
+    <h2 class="mt-4 ms-2"><a onclick="history.back();"><button class="btn btn-outline-secondary btn-circle btn-sm mb-2 me-3"><</button></a>Запись</h2>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-8">
-                <div class="card mt-5 mx-5">
-                    <div class="card-header">
-                        Кому дано
+            <div class="col-7">
+                <div class="card">
+                    <div class="card-header text-muted">
+                        Кому дано:
                     </div>
                     <div class="card-body">
-                        <h5>{{ note.cadet.get_FIO }}</h5>
+                        <h5 class="h5 mb-0">{{ note.cadet.get_FIO }}</h5>
                     </div>
-                    <div class="card-header">
-                        Вид записи
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Особое обращение с заголовком</h5>
-                        <p class="card-text">С вспомогательным текстом ниже в качестве естественного перехода к
-                            дополнительному
-                            контенту.</p>
-                    </div>
-                    <div class="card-header">
-                        Рекомендуемые
+                    <div class="card-header text-muted">
+                        Вид записи:
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title">Особое обращение с заголовком</h5>
-                        <p class="card-text">С вспомогательным текстом ниже в качестве естественного перехода к
-                            дополнительному
-                            контенту.</p>
+                        <h5 class="h5 mb-0">{{ note.type }}</h5>
+                    </div>
+                    <div class="card-header text-muted">
+                        Кем дано:
+                    </div>
+                    <div class="card-body">
+                        <h5 class="h5 mb-0">{{ note.who_gave.get_FIO }}</h5>
+                    </div>
+                    <div class="card-header text-muted">
+                        Текст записи:
+                    </div>
+                    <div class="card-body">
+                        <h5 class="h5 mb-0">{{ note.text }}</h5>
+                    </div>
+                    <div class="card-header text-muted">
+                        Дата записи:
+                    </div>
+                    <div class="card-body">
+                        <h5 class="h5 mb-0">{{ note.date|date:"d.m.Y" }}</h5>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    {{ note }}
 {% endblock %}
