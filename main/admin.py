@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models import CustomUser, Note
+from django_mptt_admin.admin import DjangoMpttAdmin
+
+from .models import CustomUser, Note, Category
 from django.contrib.auth.admin import UserAdmin
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 
@@ -40,3 +42,10 @@ class CustomUserAdmin(UserAdmin):
 
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Note)
+
+
+class CategoryAdmin(DjangoMpttAdmin):
+    prepopulated_fields = {"slug": ("title",)}
+
+
+admin.site.register(Category, CategoryAdmin)

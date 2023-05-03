@@ -1,8 +1,11 @@
 from django.contrib.auth.models import AbstractUser
+from django.urls import reverse
 from django.db import models
 from disciplinary_practice import settings
 from pytils.translit import slugify
 from uuid import uuid4
+
+from mptt.models import MPTTModel, TreeForeignKey
 
 
 class CustomUser(AbstractUser):
@@ -62,9 +65,11 @@ class CustomUser(AbstractUser):
 
     def get_FIO(self):
         if self.last_name:
-            return str(self.rang) + ' ' + str(self.last_name) + ' ' + str(self.first_name[0].upper()) + '.' + str(self.surname[0].upper()) + '.'
+            return str(self.rang) + ' ' + str(self.last_name) + ' ' + str(self.first_name[0].upper()) + '.' + str(
+                self.surname[0].upper()) + '.'
         else:
             return "'unknown'"
+
 
 class Note(models.Model):
     TYPENOTE_CHOICES = (
@@ -72,16 +77,19 @@ class Note(models.Model):
         ('Взыскание', 'Взыскание'),
         ('Снятие ранее применённого взыскания', 'Снятие ранее применённого взыскания'),
     )
-    cadet = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='note_for_cadet', verbose_name='Кому')
+    cadet = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='note_for_cadet',
+                              verbose_name='Кому')
     type = models.CharField('Вид записи', choices=TYPENOTE_CHOICES, max_length=40)
-    who_gave = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='note_who_gave', verbose_name='Кем дано')
+    who_gave = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='note_who_gave',
+                                 verbose_name='Кем дано')
     text = models.TextField('Текст записи')
     date = models.DateField('Дата')
     check_active = models.BooleanField('Активно', default=True)
     slug = models.SlugField(max_length=255, unique=True, db_index=True, blank=True)
 
     def __str__(self):
-        return self.cadet.last_name + ' ' + self.cadet.first_name[0] + '.' + self.cadet.surname[0] + '.' + ' | ' + self.type
+        return self.cadet.last_name + ' ' + self.cadet.first_name[0] + '.' + self.cadet.surname[
+            0] + '.' + ' | ' + self.type
 
     class Meta:
         verbose_name = 'Запись'
@@ -92,3 +100,24 @@ class Note(models.Model):
         if not self.slug:
             self.slug = slugify(self.type) + '-' + slugify(self.text) + '-' + uuid4().hex[:8]
             super(Note, self).save()
+
+
+class Category(MPTTModel):
+    title = models.CharField(max_length=50, unique=True, verbose_name='Название позразделения')
+    parent = TreeForeignKey('self', on_delete=models.PROTECT, null=True, blank=True, related_name='children',
+                            db_index=True, verbose_name='Родительская категория')
+    slug = models.SlugField()
+
+    class MPTTMeta:
+        order_insertion_by = ['title']
+
+    class Meta:
+        unique_together = [['parent', 'slug']]
+        verbose_name = 'Категория'
+        verbose_name_plural = 'Категории'
+
+    def get_absolute_url(self):
+        return reverse('post-by-category', args=[str(self.slug)])
+
+    def __str__(self):
+        return self.title

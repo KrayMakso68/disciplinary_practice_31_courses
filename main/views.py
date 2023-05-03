@@ -56,3 +56,5 @@ class UnitView(UserPassesTestMixin, ListView):
         else:
             cadets = CustomUser.objects.filter(group=group, unit=unit).exclude(role=CustomUser.KO).order_by('last_name')
         return cadets
+
+

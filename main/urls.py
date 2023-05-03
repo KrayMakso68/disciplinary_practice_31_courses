@@ -9,4 +9,5 @@ urlpatterns = [
     path('my_notes/', UserNotesListView.as_view(), name='view_my_notes'),
     path('my_notes/<slug:slug>/', UserNoteView.as_view(), name='user_note_detail'),
     path('<int:group>/<int:unit>/', UnitView.as_view(), name='unit'),
+    path('<str:slug>/', UnitView.as_view(), name='post-by-category'),
 ]
