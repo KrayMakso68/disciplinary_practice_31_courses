@@ -40,21 +40,30 @@ class UserNoteView(DetailView):
     template_name = 'main/note_detail.html'
 
 
-class UnitView(UserPassesTestMixin, ListView):
-    def test_func(self):
-        return self.request.user.role > CustomUser.LS
-
-    model = CustomUser
-    context_object_name = 'cadets_in_unit'
-    template_name = 'main/unit.html'
-
-    def get_queryset(self):
-        unit = self.kwargs['unit']
-        group = self.kwargs['group']
-        if self.request.user.role > CustomUser.KO:
-            cadets = CustomUser.objects.filter(group=group, unit=unit).order_by('last_name')
-        else:
-            cadets = CustomUser.objects.filter(group=group, unit=unit).exclude(role=CustomUser.KO).order_by('last_name')
-        return cadets
 
 
+
+
+
+
+
+
+
+
+#######################################################################
+# class UnitView(UserPassesTestMixin, ListView):
+#     def test_func(self):
+#         return self.request.user.role > CustomUser.LS
+#
+#     model = CustomUser
+#     context_object_name = 'cadets_in_unit'
+#     template_name = 'main/unit.html'
+#
+#     def get_queryset(self):
+#         unit = self.kwargs['unit']
+#         group = self.kwargs['group']
+#         if self.request.user.role > CustomUser.KO:
+#             cadets = CustomUser.objects.filter(group=group, unit=unit).order_by('last_name')
+#         else:
+#             cadets = CustomUser.objects.filter(group=group, unit=unit).exclude(role=CustomUser.KO).order_by('last_name')
+#         return cadets

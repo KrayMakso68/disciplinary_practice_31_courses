@@ -116,8 +116,9 @@ body {
 .btn-circle.btn-sm {
   width: 45px;
   height: 45px;
-  padding: 0px 12px;
+  padding-top: 0px;
+  padding-bottom: 3px;
   border-radius: 60px;
-  font-size: 20px;
+  font-size: 26px;
   text-align: center;
 }

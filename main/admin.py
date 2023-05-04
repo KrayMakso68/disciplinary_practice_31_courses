@@ -6,15 +6,19 @@ from django.contrib.auth.admin import UserAdmin
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 
 
+class Slug_Admin(admin.ModelAdmin):
+    readonly_fields = ('slug',)
+
+
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = CustomUser
-    list_display = ("username", "role", "rang", "last_name", "first_name", "surname", "group", "is_active",)
-    list_filter = ("role", "rang", "platoon", "group", "unit", "is_active",)
+    list_display = ("username", "role", "rang", "last_name", "first_name", "surname", "is_active",)
+    list_filter = ("role", "rang", "is_active",)
     fieldsets = (
-        ("О пользователе", {"fields": ("rang", "last_name", "first_name", "surname", "role", "password")}),
-        ("Подразделение", {"fields": ("platoon", "group", "unit")}),
+        ("О пользователе", {"fields": ("rang", "last_name", "first_name", "surname", "role", "category", "password")}),
+        ("Уникальный идентификатор", {"fields": ("slug",)}),
         ("Разрешения и группы", {"fields": ("is_active", "groups", "user_permissions")}),
     )
     add_fieldsets = (
@@ -27,21 +31,12 @@ class CustomUserAdmin(UserAdmin):
         ('О пользователе', {
             "classes": ("wide",),
             "fields": (
-                "rang", "last_name", "first_name", "surname", "role",
-            )}
-         ),
-        ('Подразделение', {
-            "classes": ("wide",),
-            "fields": (
-                "platoon", "group", "unit",
+                "rang", "last_name", "first_name", "surname", "role", "category",
             )}
          ),
     )
-    ordering = ("group",)
-
-
-admin.site.register(CustomUser, CustomUserAdmin)
-admin.site.register(Note)
+    ordering = ()
+    readonly_fields = ('slug',)  # отключить, если надо заново создать суперпользователя с нормальным slug
 
 
 class CategoryAdmin(DjangoMpttAdmin):
@@ -49,3 +44,5 @@ class CategoryAdmin(DjangoMpttAdmin):
 
 
 admin.site.register(Category, CategoryAdmin)
+admin.site.register(CustomUser, CustomUserAdmin)
+admin.site.register(Note, Slug_Admin)
