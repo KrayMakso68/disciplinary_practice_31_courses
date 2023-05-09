@@ -1,0 +1,138 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+
+{% block title %}
+    Подразделение
+{% endblock %}
+
+
+{% block content %}
+    <h2 class="mt-4 ms-2"><a onclick="history.back();">
+        <button class="btn btn-outline-secondary btn-circle btn-sm mb-2 me-3"><</button>
+    </a>{{ main_node }}</h2>
+    <div class="container">
+        <div class="row justify-content-center">
+            {% if main_node.is_leaf_node %}
+                <div class="alert alert-secondary px-5 pb-0 pt-4 justify-content-center w-75">
+                <div class="col mb-4">
+                    <div class="card">
+                        <div class="card-header h5">
+                            {{ main_node }}
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-striped ">
+                                <tbody>
+                                {% for cadet in cadets %}
+                                    <tr>
+                                        <th scope="row">{{ forloop.counter }}</th>
+                                        <td>{{ cadet.get_FIO }}</td>
+                                        <td class="text-end">
+                                            <a class="btn btn-sm btn-success" href="#">Добавить запись</a>
+                                            <a class="btn btn-sm btn-warning" href="{% url 'view_user_notes' slug=cadet.slug %}">Подробнее</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            {% elif main_node.type == "group" %}
+                <div class="alert alert-secondary px-5 pb-0 pt-4 justify-content-center w-75">
+                {% for child_node in main_node.get_children %}
+                <div class="col mb-4">
+                    <div class="card">
+                        <div class="card-header h5">
+                            {{ child_node }}
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-striped ">
+                                <tbody>
+                                {% for cadet in child_node.staff.all|dictsort:"last_name" %}
+                                    <tr>
+                                        <th scope="row">{{ forloop.counter }}</th>
+                                        <td>{{ cadet.get_FIO }}</td>
+                                        <td class="text-end">
+                                            <a class="btn btn-sm btn-success" href="#">Добавить запись</a>
+                                            <a class="btn btn-sm btn-warning" href="{% url 'view_user_notes' slug=cadet.slug %}">Подробнее</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                </div>
+            {% elif main_node.type == "platoon" %}
+                {% for child_node in main_node.get_children %}
+                    <div class="alert alert-secondary px-5 pb-0 pt-4 justify-content-center w-75">
+                    <h4 class="alert-heading mb-3">{{ child_node }}</h4>
+                    {% for node in child_node.get_children %}
+                        <div class="col mb-4">
+                            <div class="card">
+                                <div class="card-header h5">
+                                    {{ node }}
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-striped ">
+                                        <tbody>
+                                        {% for cadet in node.staff.all|dictsort:"last_name" %}
+                                            <tr>
+                                                <th scope="row">{{ forloop.counter }}</th>
+                                                <td>{{ cadet.get_FIO }}</td>
+                                                <td class="text-end">
+                                                    <a class="btn btn-sm btn-success" href="#">Добавить запись</a>
+                                                    <a class="btn btn-sm btn-warning"
+                                                       href="{% url 'view_user_notes' slug=cadet.slug %}">Подробнее</a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                {% endfor %}
+            {% else %}
+                {% for platoon_node in main_node.get_children %}
+                    <h2 class="mb-4 py-2 mt-5 justify-content-center w-75 text-center shadow">{{ platoon_node }}</h2>
+                    {% for child_node in platoon_node.get_children %}
+                        <div class="alert alert-secondary px-5 pb-0 pt-4 justify-content-center w-75">
+                        <h4 class="alert-heading mb-3">{{ child_node }}</h4>
+                        {% for node in child_node.get_children %}
+                            <div class="col mb-4">
+                                <div class="card">
+                                    <div class="card-header h5">
+                                        {{ node }}
+                                    </div>
+                                    <div class="card-body">
+                                        <table class="table table-striped ">
+                                            <tbody>
+                                            {% for cadet in node.staff.all|dictsort:"last_name" %}
+                                                <tr>
+                                                    <th scope="row">{{ forloop.counter }}</th>
+                                                    <td>{{ cadet.get_FIO }}</td>
+                                                    <td class="text-end">
+                                                        <a class="btn btn-sm btn-success" href="#">Добавить запись</a>
+                                                        <a class="btn btn-sm btn-warning"
+                                                           href="{% url 'view_user_notes' slug=cadet.slug %}">Подробнее</a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+    </div>
+{% endblock %}

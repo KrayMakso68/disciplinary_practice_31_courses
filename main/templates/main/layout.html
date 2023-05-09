@@ -42,38 +42,17 @@
                   <ul class="nav flex-column">
                       {% if request.user.role == 1 or request.user.role == 2 or request.user.role == 3 %}
                       <li class="nav-item">
-                          <a class="nav-link active" aria-current="page" href="{% url 'view_my_notes' %}">
+                          <a class="nav-link active" aria-current="page" href="{% url 'view_user_notes' slug=request.user.slug %}">
                               <span data-feather="file-text"></span>
                               Мои записи
                           </a>
                       </li>
                       {% endif %}
-                      {% if request.user.role == 2 %}
+                      {% if request.user.role > 1 %}
                       <li class="nav-item">
-                          <a class="nav-link active" aria-current="page" href="">
+                          <a class="nav-link active" aria-current="page" href="{% url 'view_group_content' %}">
                               <span data-feather="users"></span>
-                              {{ request.user.unit }} отделение {{ request.user.group }} гр.
-                          </a>
-                      </li>
-                      {% elif request.user.role == 3 %}
-                      <li class="nav-item">
-                          <a class="nav-link active" aria-current="page" href="#">
-                              <span data-feather="users"></span>
-                              {{ request.user.group }} учебная группа
-                          </a>
-                      </li>
-                      {% elif request.user.role == 4 %}
-                      <li class="nav-item">
-                          <a class="nav-link active" aria-current="page" href="#">
-                              <span data-feather="users"></span>
-                              {{ request.user.platoon }} взвод
-                          </a>
-                      </li>
-                      {% elif request.user.role == 5 or request.user.role == 6 %}
-                      <li class="nav-item">
-                          <a class="nav-link active" aria-current="page" href="#">
-                              <span data-feather="users"></span>
-                              31 курс
+                              {{ request.user.category.title }}
                           </a>
                       </li>
                       {% endif %}

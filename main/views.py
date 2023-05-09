@@ -26,12 +26,20 @@ class CustomLogin(LoginView):
 class UserNotesListView(LoginRequiredMixin, ListView):
     model = Note
     context_object_name = 'user_notes'
-    template_name = 'main/my_notes.html'
+    template_name = 'main/user_notes.html'
 
     def get_queryset(self):
-        login_user = self.request.user
-        notes = Note.objects.filter(cadet=login_user).order_by('-date')
+        slug = self.kwargs["slug"]
+        user = CustomUser.objects.filter(slug=slug).first()
+        notes = user.notes.all()
         return notes
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        slug = self.kwargs["slug"]
+        user = CustomUser.objects.filter(slug=slug).first()
+        context["user"] = user
+        return context
 
 
 class UserNoteView(DetailView):
@@ -40,13 +48,30 @@ class UserNoteView(DetailView):
     template_name = 'main/note_detail.html'
 
 
+class GroupsContentView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    def test_func(self):
+        return self.request.user.role > CustomUser.LS
 
+    model = CustomUser
+    context_object_name = 'cadets'
+    template_name = 'main/content_groups.html'
 
+    def get_queryset(self):
+        login_user = self.request.user
+        main_node = self.request.user.category
+        if main_node.is_leaf_node():
+            cadets = main_node.staff.exclude(slug=login_user.slug)
+        else:
+            cadets = CustomUser.objects.none()
+            nodes = main_node.get_descendants()
+            for node in nodes:
+                cadets = cadets | node.staff.all()
+        return cadets.order_by('last_name')
 
-
-
-
-
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["main_node"] = self.request.user.category
+        return context
 
 
 
@@ -57,7 +82,7 @@ class UserNoteView(DetailView):
 #
 #     model = CustomUser
 #     context_object_name = 'cadets_in_unit'
-#     template_name = 'main/unit.html'
+#     template_name = 'main/content_groups.html'
 #
 #     def get_queryset(self):
 #         unit = self.kwargs['unit']

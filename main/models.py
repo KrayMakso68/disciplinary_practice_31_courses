@@ -11,7 +11,20 @@ from mptt.models import MPTTModel, TreeForeignKey
 
 
 class Category(MPTTModel):
+    COURSE_TYPE = "course"
+    PLATOON_TYPE = "platoon"
+    GROUP_TYPE = "group"
+    UNIT_TYPE = "unit"
+
+    type_choices = [
+        (COURSE_TYPE, "Курс"),
+        (PLATOON_TYPE, "Взвод"),
+        (GROUP_TYPE, "Группа"),
+        (UNIT_TYPE, "Отделение"),
+    ]
+
     title = models.CharField(max_length=50, unique=True, verbose_name='Название позразделения')
+    type = models.CharField(choices=type_choices, max_length=25, verbose_name="Тип категории")
     parent = TreeForeignKey('self', on_delete=models.PROTECT, null=True, blank=True, related_name='children',
                             db_index=True, verbose_name='Родительская категория')
     slug = models.SlugField()
@@ -24,8 +37,8 @@ class Category(MPTTModel):
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
 
-    def get_absolute_url(self):
-        return reverse('post-by-category', args=[str(self.slug)])
+    # def get_absolute_url(self):
+    #     return reverse('post-by-category', args=[str(self.slug)])
 
     def __str__(self):
         return self.title

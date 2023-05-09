@@ -2,14 +2,15 @@
 {% load static %}
 
 {% block title %}
-    Мои записи
+    Записи
 {% endblock %}
 
 
 {% block content %}
-    <h2 class="mt-4 ms-2"><a onclick="history.back();"><button class="btn btn-outline-secondary btn-circle btn-sm mb-2 me-3"><</button></a>Мои записи</h2>
+    <h2 class="mt-4 ms-2"><a onclick="history.back();"><button class="btn btn-outline-secondary btn-circle btn-sm mb-2 me-3"><</button></a>Записи</h2>
+    <h4 class="mt-4 mx-5 bg-light w-25 border-bottom">{{ user.get_FIO }}</h4>
     {% if user_notes %}
-    <div class="table-responsive mt-5 mx-5">
+    <div class="table-responsive mt-4 mx-5">
         <table class="table table-striped">
             <thead class="table-dark">
             <tr>
@@ -27,7 +28,7 @@
                     <td>{{ note.type }}</td>
                     <td>{{ note.who_gave.get_FIO }}</td>
                     <td>{{ note.date|date:"d.m.Y" }}</td>
-                    <td><a class="btn btn-sm btn-warning" href="{% url 'user_note_detail' slug=note.slug %}">Подробнее</a></td>
+                    <td class="text-end"><a class="btn btn-sm btn-warning" href="{% url 'user_note_detail' slug=note.slug %}">Подробнее</a></td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -35,7 +36,7 @@
     </div>
     {% else %}
         <div class="alert alert-warning text-center mt-4 mx-5" role="alert">
-            <h4 class="mt-1">У вас нет записей</h4>
+            <h4 class="mt-1">Нет записей</h4>
         </div>
     {% endif %}
 {% endblock %}
