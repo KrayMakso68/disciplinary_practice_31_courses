@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from main.forms import UserLoginForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
 
 from main.models import Note, CustomUser
 
@@ -74,21 +74,11 @@ class GroupsContentView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         return context
 
 
-
-#######################################################################
-# class UnitView(UserPassesTestMixin, ListView):
+# class NoteCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 #     def test_func(self):
 #         return self.request.user.role > CustomUser.LS
 #
-#     model = CustomUser
-#     context_object_name = 'cadets_in_unit'
-#     template_name = 'main/content_groups.html'
-#
-#     def get_queryset(self):
-#         unit = self.kwargs['unit']
-#         group = self.kwargs['group']
-#         if self.request.user.role > CustomUser.KO:
-#             cadets = CustomUser.objects.filter(group=group, unit=unit).order_by('last_name')
-#         else:
-#             cadets = CustomUser.objects.filter(group=group, unit=unit).exclude(role=CustomUser.KO).order_by('last_name')
-#         return cadets
+#     model = Note
+#     context_object_name = 'note'
+#     template_name = 'main/ '
+
