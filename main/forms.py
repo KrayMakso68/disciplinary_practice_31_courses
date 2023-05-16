@@ -1,6 +1,8 @@
+from datetime import datetime
+
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AuthenticationForm, UsernameField
-from .models import CustomUser
+from .models import CustomUser, Note
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -13,6 +15,7 @@ class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = CustomUser
         fields = "__all__"
+
 
 # https://testdriven.io/blog/django-custom-user-model/
 
@@ -42,5 +45,34 @@ class UserLoginForm(AuthenticationForm):
         "inactive": "Permission denied",
     }
 
+
 # https://stackoverflow.com/questions/55369645/how-to-customize-default-auth-login-form-in-django
 # https://pytutorial.com/loginview-django-example/
+
+class NoteCreateForm(forms.ModelForm):
+    class Meta:
+        model = Note
+        fields = ['type', 'text', 'date']
+        widgets = {
+            "type": forms.Select(
+                attrs={
+                    'class': 'form-select',
+                    '': ''
+                }
+            ),
+            "text": forms.Textarea(
+                attrs={
+                    'class': 'form-control',
+                    'rows': '4',
+                }
+            ),
+            "date": forms.DateTimeInput(
+                attrs={
+                    'type': 'datetime-local',
+                    'class': 'form-control'
+                },
+                format='%Y-%m-%dT%H:%M',
+            )
+        }
+
+

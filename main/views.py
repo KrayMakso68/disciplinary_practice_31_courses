@@ -1,7 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect
-from main.forms import UserLoginForm
+from main.forms import UserLoginForm, NoteCreateForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.views.generic import ListView, DetailView, CreateView
@@ -74,11 +74,18 @@ class GroupsContentView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         return context
 
 
-# class NoteCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
-#     def test_func(self):
-#         return self.request.user.role > CustomUser.LS
-#
-#     model = Note
-#     context_object_name = 'note'
-#     template_name = 'main/ '
+class NoteCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    def test_func(self):
+        return self.request.user.role > CustomUser.LS
 
+    model = Note
+    form_class = NoteCreateForm
+    context_object_name = 'note'
+    template_name = 'main/note_create.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        slug = self.kwargs["slug"]
+        user = CustomUser.objects.filter(slug=slug).first()
+        context["for_user"] = user
+        return context
