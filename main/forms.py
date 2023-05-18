@@ -63,7 +63,7 @@ class NoteCreateForm(forms.ModelForm):
             "text": forms.Textarea(
                 attrs={
                     'class': 'form-control',
-                    'rows': '4',
+                    'rows': '5',
                 }
             ),
             "date": forms.DateTimeInput(

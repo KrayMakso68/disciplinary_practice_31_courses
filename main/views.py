@@ -1,6 +1,9 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import LoginView
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
+from django.urls import reverse
+
 from main.forms import UserLoginForm, NoteCreateForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
@@ -83,9 +86,22 @@ class NoteCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     context_object_name = 'note'
     template_name = 'main/note_create.html'
 
+    def get_success_url(self):
+        return reverse('view_user_notes', kwargs={"slug": self.kwargs["slug"]})
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         slug = self.kwargs["slug"]
-        user = CustomUser.objects.filter(slug=slug).first()
+        user = CustomUser.objects.get(slug=slug)
         context["for_user"] = user
         return context
+
+    def post(self, *args, **kwargs):
+        form = NoteCreateForm(self.request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.cadet = CustomUser.objects.get(slug=self.kwargs["slug"])
+            instance.who_gave = self.request.user
+            instance.save()
+            return HttpResponseRedirect(self.get_success_url())
+        return render(self.request, 'main/note_create.html', {'form': form})
