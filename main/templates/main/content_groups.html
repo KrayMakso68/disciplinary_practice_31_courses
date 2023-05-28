@@ -122,12 +122,14 @@
                 {% endfor %}
             {% else %}
                 {% for platoon_node in main_node.get_children %}
+                    {% with forloop.counter as one %}
                     <div class="row justify-content-center">
                         <div class="col-4">
                             <h2 class="alert alert-light text-black mb-3 py-1 mt-5 text-center shadow">{{ platoon_node }}</h2>
                         </div>
                     </div>
                     {% for child_node in platoon_node.get_children %}
+                        {% with forloop.counter as two %}
                         <div class="alert alert-secondary px-5 pb-0 pt-4 justify-content-center w-75">
                             <div class="row row-cols-2 justify-content-between">
                                 <div class="col-4">
@@ -151,34 +153,47 @@
                                     </table>
                                 </div>
                             </div>
-                        {% for node in child_node.get_children %}
-                            <div class="col mb-4">
-                                <div class="card">
-                                    <div class="card-header h5">
-                                        {{ node }}
+                            <div class="accordion" id="accordionExample">
+                                {% for node in child_node.get_children %}
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="heading{{ one }}{{ two }}{{ forloop.counter }}">
+                                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#collapse{{ one }}{{ two }}{{ forloop.counter }}" aria-expanded="true"
+                                                    aria-controls="collapse{{ one }}{{ two }}{{ forloop.counter }}">
+                                                <h5>
+                                                    {{ node }}
+                                                </h5>
+                                            </button>
+                                        </h2>
+                                        <div id="collapse{{ one }}{{ two }}{{ forloop.counter }}" class="accordion-collapse collapse"
+                                             aria-labelledby="heading{{ one }}{{ two }}{{ forloop.counter }}" data-bs-parent="#accordionExample">
+                                            <div class="accordion-body">
+                                                <table class="table table-striped ">
+                                                    <tbody>
+                                                    {% for cadet in node.staff.all|dictsort:"last_name" %}
+                                                        <tr>
+                                                            <th scope="row">{{ forloop.counter }}</th>
+                                                            <td>{{ cadet.get_FIO }}</td>
+                                                            <td class="text-end">
+                                                                <a class="btn btn-sm btn-success"
+                                                                   href="{% url 'create_note' slug=cadet.slug %}">Добавить
+                                                                    запись</a>
+                                                                <a class="btn btn-sm btn-warning"
+                                                                   href="{% url 'view_user_notes' slug=cadet.slug %}">Подробнее</a>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="card-body">
-                                        <table class="table table-striped ">
-                                            <tbody>
-                                            {% for cadet in node.staff.all|dictsort:"last_name" %}
-                                                <tr>
-                                                    <th scope="row">{{ forloop.counter }}</th>
-                                                    <td>{{ cadet.get_FIO }}</td>
-                                                    <td class="text-end">
-                                                        <a class="btn btn-sm btn-success" href="{% url 'create_note' slug=cadet.slug %}">Добавить запись</a>
-                                                        <a class="btn btn-sm btn-warning"
-                                                           href="{% url 'view_user_notes' slug=cadet.slug %}">Подробнее</a>
-                                                    </td>
-                                                </tr>
-                                            {% endfor %}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                                {% endfor %}
                             </div>
-                        {% endfor %}
                         </div>
+                    {% endwith %}
                     {% endfor %}
+                {% endwith %}
                 {% endfor %}
             {% endif %}
     </div>
