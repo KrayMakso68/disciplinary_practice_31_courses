@@ -68,47 +68,23 @@
                 </div>
             {% elif main_node.type == "platoon" %}
                 {% for child_node in main_node.get_children %}
-                    <div class="alert alert-secondary px-5 pb-0 pt-4 justify-content-center w-75">
-                    <div class="row row-cols-2 justify-content-between">
-                        <div class="col-4">
-                            <h2 class="alert-heading mb-3">{{ child_node }}</h2>
-                        </div>
-                        <div class="col-8">
-                            <table class="table table-striped ">
-                                <tbody>
-                                {% for kg in child_node.staff.all %}
-                                    <tr>
-                                        <th scope="row">Командир группы</th>
-                                        <td>{{ kg.get_FIO }}</td>
-                                        <td class="text-end">
-                                            <a class="btn btn-sm btn-success" href="{% url 'create_note' slug=kg.slug %}">Добавить запись</a>
-                                            <a class="btn btn-sm btn-warning"
-                                               href="{% url 'view_user_notes' slug=kg.slug %}">Подробнее</a>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    {% for node in child_node.get_children %}
-                        <div class="col mb-4">
-                            <div class="card">
-                                <div class="card-header h5">
-                                    {{ node }}
+                    {% with forloop.counter as one %}
+                        <div class="alert alert-secondary px-5 pb-0 pt-4 justify-content-center w-75">
+                            <div class="row row-cols-2 justify-content-between">
+                                <div class="col-4">
+                                    <h2 class="alert-heading mb-3">{{ child_node }}</h2>
                                 </div>
-                                <div class="card-body">
+                                <div class="col-8">
                                     <table class="table table-striped ">
                                         <tbody>
-                                        {% for cadet in node.staff.all|dictsort:"last_name" %}
+                                        {% for kg in child_node.staff.all %}
                                             <tr>
-                                                <th scope="row">{{ forloop.counter }}</th>
-                                                <td>{{ cadet.get_FIO }}</td>
+                                                <th scope="row">Командир группы</th>
+                                                <td>{{ kg.get_FIO }}</td>
                                                 <td class="text-end">
-                                                    <a class="btn btn-sm btn-success" href="{% url 'create_note' slug=cadet.slug %}">Добавить запись</a>
+                                                    <a class="btn btn-sm btn-success" href="{% url 'create_note' slug=kg.slug %}">Добавить запись</a>
                                                     <a class="btn btn-sm btn-warning"
-                                                       href="{% url 'view_user_notes' slug=cadet.slug %}">Подробнее</a>
+                                                       href="{% url 'view_user_notes' slug=kg.slug %}">Подробнее</a>
                                                 </td>
                                             </tr>
                                         {% endfor %}
@@ -116,9 +92,47 @@
                                     </table>
                                 </div>
                             </div>
+                            <div class="accordion accordion-flush mb-5" id="accordionFlushExample">
+                                {% for node in child_node.get_children %}
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="heading{{ one }}{{ forloop.counter }}">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#flush-collapse{{ one }}{{ forloop.counter }}" aria-expanded="false"
+                                                    aria-controls="flush-collapse{{ one }}{{ forloop.counter }}">
+                                                <h5>
+                                                    {{ node }}
+                                                </h5>
+                                            </button>
+                                        </h2>
+                                        <div id="flush-collapse{{ one }}{{ forloop.counter }}" class="accordion-collapse collapse"
+                                             aria-labelledby="flush-heading{{ one }}{{ forloop.counter }}" data-bs-parent="#accordionFlushExample">
+                                            <div class="accordion-body">
+                                                <table class="table table-striped ">
+                                                    <tbody>
+                                                    {% for cadet in node.staff.all|dictsort:"last_name" %}
+                                                        <tr>
+                                                            <th scope="row">{{ forloop.counter }}</th>
+                                                            <td>{{ cadet.get_FIO }}</td>
+                                                            <td class="text-end">
+                                                                <a class="btn btn-sm btn-success"
+                                                                   href="{% url 'create_note' slug=cadet.slug %}">Добавить
+                                                                    запись</a>
+                                                                <a class="btn btn-sm btn-warning"
+                                                                   href="{% url 'view_user_notes' slug=cadet.slug %}">Подробнее</a>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
                         </div>
-                    {% endfor %}
-                    </div>
+                    {% endwith %}
+
+
                 {% endfor %}
             {% else %}
                 {% for platoon_node in main_node.get_children %}
@@ -153,20 +167,20 @@
                                     </table>
                                 </div>
                             </div>
-                            <div class="accordion" id="accordionExample">
+                            <div class="accordion accordion-flush mb-5" id="accordionFlushExample">
                                 {% for node in child_node.get_children %}
                                     <div class="accordion-item">
                                         <h2 class="accordion-header" id="heading{{ one }}{{ two }}{{ forloop.counter }}">
-                                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                                    data-bs-target="#collapse{{ one }}{{ two }}{{ forloop.counter }}" aria-expanded="true"
-                                                    aria-controls="collapse{{ one }}{{ two }}{{ forloop.counter }}">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#flush-collapse{{ one }}{{ two }}{{ forloop.counter }}" aria-expanded="false"
+                                                    aria-controls="flush-collapse{{ one }}{{ two }}{{ forloop.counter }}">
                                                 <h5>
                                                     {{ node }}
                                                 </h5>
                                             </button>
                                         </h2>
-                                        <div id="collapse{{ one }}{{ two }}{{ forloop.counter }}" class="accordion-collapse collapse"
-                                             aria-labelledby="heading{{ one }}{{ two }}{{ forloop.counter }}" data-bs-parent="#accordionExample">
+                                        <div id="flush-collapse{{ one }}{{ two }}{{ forloop.counter }}" class="accordion-collapse collapse"
+                                             aria-labelledby="flush-heading{{ one }}{{ two }}{{ forloop.counter }}" data-bs-parent="#accordionFlushExample">
                                             <div class="accordion-body">
                                                 <table class="table table-striped ">
                                                     <tbody>
