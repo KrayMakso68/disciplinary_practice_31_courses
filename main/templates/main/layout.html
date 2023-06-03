@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{% static 'main/css/main.css' %}">
     <link rel="stylesheet" href="{% static 'main/css/bootstrap.min.css' %}">
     <link href="{% static 'main/js/main.js' %}" rel="stylesheet">
+    {% block link %}{% endblock %}
 
     <title>{% block title %}{% endblock %}</title>
   </head>
@@ -59,30 +60,12 @@
                   </ul>
 
                   <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 pt-5 mt-4 mb-1 text-muted">
-                      fsdf</h6>
+                      сводные данные</h6>
                   <ul class="nav flex-column mb-2">
                       <li class="nav-item">
-                          <a class="nav-link" href="#">
+                          <a class="nav-link" href="{% url 'statistica' %}">
                               <span data-feather="file-text"></span>
-                              Current month
-                          </a>
-                      </li>
-                      <li class="nav-item">
-                          <a class="nav-link" href="#">
-                              <span data-feather="file-text"></span>
-                              Last quarter
-                          </a>
-                      </li>
-                      <li class="nav-item">
-                          <a class="nav-link" href="#">
-                              <span data-feather="file-text"></span>
-                              Social engagement
-                          </a>
-                      </li>
-                      <li class="nav-item">
-                          <a class="nav-link" href="#">
-                              <span data-feather="file-text"></span>
-                              Year-end sale
+                              Статистика подразделения
                           </a>
                       </li>
                   </ul>
@@ -100,6 +83,8 @@
 
 <script src="{% static 'main/js/bootstrap.bundle.min.js' %}"></script>
 <script src="{% static 'main/js/feather.min.js' %}"></script>
+<script src="{% static 'main/js/jquery-3.6.3.min.js' %}"></script>
 <script src="{% static 'main/js/main.js' %}"></script>
+{% block script %}{% endblock %}
   </body>
 </html>

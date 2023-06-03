@@ -105,3 +105,7 @@ class NoteCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
             instance.save()
             return HttpResponseRedirect(self.get_success_url())
         return render(self.request, 'main/note_create.html', {'form': form})
+
+
+def statistica_view(request):
+    return render(request, 'main/statistica.html')
