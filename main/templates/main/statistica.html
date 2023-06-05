@@ -12,11 +12,25 @@
 {% block content %}
     <h2 class="mt-4 ms-2"><a onclick="history.back();"><button class="btn btn-outline-secondary btn-circle btn-sm mb-2 me-3"><</button></a>Сводные данные</h2>
 
-    <div id="reportrange"
-         style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
-        <i class="fa fa-calendar"></i>&nbsp;
-        <span></span> <i class="fa fa-caret-down"></i>
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <div class="card border-secondary p-1 shadow">
+                <div class="card-header">Поиск по дате</div>
+                <div class="card-body text-dark bg-light">
+                    <div class="d-grid gap-2 col-12 mx-auto">
+                        <div id="reportrange"
+                             style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                            <span data-feather="calendar" style="margin-bottom: 0.5%;"></span>
+                            <span></span> <i class="fa fa-caret-down"></i>
+                        </div>
+                        <button type="button" class="btn btn-primary mt-3">Найти</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
+
 
 
     {% if user_notes %}
@@ -61,7 +75,7 @@
             var end = moment();
 
             function cb(start, end) {
-                $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                $('#reportrange span').html(start.format('D/MM/Y') + ' \u2013 ' + end.format('D/MM/Y'));
             }
 
             $('#reportrange').daterangepicker({
