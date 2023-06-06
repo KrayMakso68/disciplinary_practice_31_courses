@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import LoginView
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
@@ -109,3 +109,7 @@ class NoteCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
 def statistica_view(request):
     return render(request, 'main/statistica.html')
+
+
+def statistica_search(request):
+    pass
