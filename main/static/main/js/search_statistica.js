@@ -64,21 +64,22 @@ $(document).ready(function () {
 const sendSearchData = (start, end) => {
     $.ajax({
         type: 'POST',
-        url: '',
+        url: '/statistica_search/',
         data: {
             'csrfmiddlewaretoken': csrf,
-            'startdate': start,
-            'enddate': end,
+            'startdate': moment(start).format('D/MM/Y'),
+            'enddate': moment(end).format('D/MM/Y'),
         },
-        success: () => {
-
+        success: (data) => {
+            console.log(data);
         },
         error: () => {
 
         }
     })
 }
-$('#search_btn').click(function(){
-    console.log(startDate.format('D/MM/Y') + ' \u2013 ' + endDate.format('D/MM/Y'));
+$('#search_btn').click(function(e){
+    e.preventDefault();
+    console.log(startDate.format('D.MM.Y') + ' \u2013 ' + endDate.format('D.MM.Y'));
     sendSearchData(startDate, endDate);
 });

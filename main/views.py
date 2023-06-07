@@ -112,4 +112,30 @@ def statistica_view(request):
 
 
 def statistica_search(request):
-    pass
+    is_ajax = request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+    if is_ajax:
+        startdate = request.POST.get('startdate')
+        enddate = request.POST.get('enddate')
+        promotions = 0       #поощрения
+        punishments = 0      #взыскания
+        withdrawals = 0      #снятие взяскания
+        user_node = request.user.category
+        all_lower_nodes = user_node.get_descendants(include_self=True)
+        for node in all_lower_nodes:
+            cadets = node.staff.all()
+            for cadet in cadets:
+                notes = cadet.notes.all().filter(date__range=[startdate, enddate])
+                for note in notes:
+                    if note.type == 'Поощрение':
+                        promotions = promotions + 1
+                    elif note.type == 'Взыскание':
+                        punishments = punishments + 1
+                    else:
+                        withdrawals = withdrawals + 1
+        all_notes = promotions + punishments + withdrawals
+        return JsonResponse({'promotions': promotions,
+                             'punishments': punishments,
+                             'withdrawals': withdrawals,
+                             'all_notes': all_notes
+                             })
+    return JsonResponse({})
