@@ -10,7 +10,10 @@
 {% endblock %}
 
 {% block content %}
-    <h2 class="mt-4 ms-2"><a onclick="history.back();"><button class="btn btn-outline-secondary btn-circle btn-sm mb-2 me-3"><</button></a>Сводные данные</h2>
+    <h2 class="mt-4 ms-2"><a onclick="history.back();">
+        <button class="btn btn-outline-secondary btn-circle btn-sm mb-2 me-3"><</button>
+    </a>Сводные данные
+    </h2>
 
     <div class="row justify-content-center">
         <div class="col-4">
@@ -25,19 +28,21 @@
                                 <span data-feather="calendar" style="margin-bottom: 0.5%;"></span>
                                 <span></span>
                             </div>
-                            <button type="button" id="search_btn" class="btn btn-primary mt-3" data-dismiss="modal">Найти</button>
+                            <button type="button" id="search_btn" class="btn btn-primary mt-3" data-dismiss="modal">
+                                Найти
+                            </button>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
     </div>
-    <div class="row justify-content-center alert alert-secondary mt-5 mx-5">
-        <div class="col-4 me-5">
+    <div class="row justify-content-center alert alert-secondary mt-5 mx-5" id="show_content" style="visibility:hidden;">
+        <div class="col-5 me-5">
             <canvas id="myChart"></canvas>
         </div>
         <div class="col-6 align-self-center">
-            <table class="table table-striped table-bordered">
+            <table class="table table-striped table-bordered table-sm">
                 <thead class="table-dark">
                 <tr class="text-center">
                     <th scope="col">Период</th>
@@ -49,48 +54,16 @@
                 </thead>
                 <tbody>
                 <tr class="text-center text-nowrap" id="content_row">
-                    <td scope="row">1</td>
-                    <th scope="row">2</th>
-                    <td scope="row">3</td>
-                    <td scope="row">4</td>
-                    <td scope="row">5</td>
+
                 </tr>
                 </tbody>
             </table>
         </div>
     </div>
 
-
-    {% if user_notes %}
-    <div class="table-responsive mt-4 mx-5">
-        <table class="table table-striped">
-            <thead class="table-dark">
-            <tr>
-                <th scope="col">№</th>
-                <th scope="col">Запись</th>
-                <th scope="col">Кем дано</th>
-                <th scope="col">Дата</th>
-                <th scope="col"></th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for note in user_notes %}
-                <tr>
-                    <th scope="row">{{ forloop.counter }}</th>
-                    <td>{{ note.type }}</td>
-                    <td>{{ note.who_gave.get_FIO }}</td>
-                    <td>{{ note.date|date:"d.m.Y" }}</td>
-                    <td class="text-end"><a class="btn btn-sm btn-warning" href="{% url 'user_note_detail' slug=note.slug %}">Подробнее</a></td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+    <div class="alert alert-warning text-center mt-4 mx-5" id="no_content" role="alert">
+        <h4 class="mt-1">Нет данных</h4>
     </div>
-    {% else %}
-        <div class="alert alert-warning text-center mt-4 mx-5" role="alert">
-            <h4 class="mt-1">Нет данных</h4>
-        </div>
-    {% endif %}
 {% endblock %}
 
 {% block script %}

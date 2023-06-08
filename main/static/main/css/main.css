@@ -122,3 +122,7 @@ body {
   font-size: 26px;
   text-align: center;
 }
+
+.not-visible {
+  display: none;
+}

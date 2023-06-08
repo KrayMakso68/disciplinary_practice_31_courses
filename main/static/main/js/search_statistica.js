@@ -77,13 +77,16 @@ const sendSearchData = (start, end) => {
         },
         success: (data) => {
             console.log(data);
+            $('#show_content').css("visibility", "visible");
             promotions = data.promotions;
             punishments = data.punishments;
             withdrawals = data.withdrawals;
             all_notes = data.all_notes;
             chart.data.datasets[0].data = [data.promotions, data.punishments, data.withdrawals]
             chart.update();
+            chart.render();
             $('#content_row').replaceWith(`<tr class="text-center text-nowrap" id="content_row"><td>${startDate.format('DD.MM.Y')} \u2013 ${endDate.format('DD.MM.Y')}</td><th scope="row">${all_notes}</th><td>${promotions}</td><td>${punishments}</td><td>${withdrawals}</td></tr>`);
+
         },
         error: () => {
 
@@ -97,39 +100,47 @@ $('#search_btn').click(function(e){
 
 const ctx = document.getElementById('myChart');
 
-        const data = {
-            labels: ['Поощрения', 'Взыскания', 'Снятия взыскания'],
-            datasets: [
-                {
-                    data: [1,1,1],
-                    backgroundColor: ['#27AE60', '#CB4335', '#faeee4'],
-                }
-            ]
-        };
-        const config = {
-          type: 'doughnut',
-          data: data,
-          options: {
-            responsive: true,
-            plugins: {
-              legend: {
+const data = {
+    labels: ['Поощрения', 'Взыскания', 'Снятия взыскания'],
+    datasets: [
+        {
+            data: [1, 1, 1],
+            backgroundColor: ['#27AE60', '#CB4335', '#faeee4'],
+        }
+    ]
+};
+const config = {
+    type: 'doughnut',
+    data: data,
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
                 position: 'top',
-              },
+            },
+            title: {
+                display: true,
+                position: 'bottom',
+                text: 'Круговая диаграмма записей',
+                font: {
+                        size: 15
+                }
             }
-          },
-        };
-        var chart = new Chart(ctx, config);
-
-        function handleHover(evt, item, legend) {
-            legend.chart.data.datasets[0].backgroundColor.forEach((color, index, colors) => {
-                colors[index] = index === item.index || color.length === 9 ? color : color + '4D';
-            });
-            legend.chart.update();
         }
+    },
+};
+var chart = new Chart(ctx, config);
 
-        function handleLeave(evt, item, legend) {
-            legend.chart.data.datasets[0].backgroundColor.forEach((color, index, colors) => {
-                colors[index] = color.length === 9 ? color.slice(0, -2) : color;
-            });
-            legend.chart.update();
-        }
+function handleHover(evt, item, legend) {
+    legend.chart.data.datasets[0].backgroundColor.forEach((color, index, colors) => {
+        colors[index] = index === item.index || color.length === 9 ? color : color + '4D';
+    });
+    legend.chart.update();
+}
+
+function handleLeave(evt, item, legend) {
+    legend.chart.data.datasets[0].backgroundColor.forEach((color, index, colors) => {
+        colors[index] = color.length === 9 ? color.slice(0, -2) : color;
+    });
+    legend.chart.update();
+}
