@@ -1,17 +1,19 @@
+import json
+from io import StringIO
+
+from docxtpl import DocxTemplate
+
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import LoginView
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
-
 from main.forms import UserLoginForm, NoteCreateForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.views.generic import ListView, DetailView, CreateView
-
 from main.models import Note, CustomUser
 
-from docxtpl import DocxTemplate
 
 
 @login_required(login_url="login/")
@@ -146,6 +148,20 @@ def statistica_search(request):
 def statistica_download(request):
     is_ajax = request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
     if is_ajax:
-        data = request.POST.get('pars_data')
-        user_node = request.user.category
-        doc = DocxTemplate("word_tpl.docx")
+        data = json.loads(request.POST.get('pars_data'))
+        doc = DocxTemplate('main/static/main/docx/Statistica_template.docx')
+        context = {
+            'userNode': request.user.category,
+            'dateInterval': request.POST.get('dateInterval'),
+            'all_notes': data['all_notes'],
+            'promotions': data['promotions'],
+            'punishments': data['punishments'],
+            'withdrawals': data['withdrawals'],
+            'pieImg': '',
+        }
+        doc.render(context)
+        doc.save('main/static/main/docx/Statistica.docx')
+        #тута нужна выгрузка файла пользователю на скачивание!!!
+
+        return JsonResponse({})
+    return JsonResponse({})

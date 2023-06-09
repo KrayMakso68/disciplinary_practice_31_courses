@@ -1,9 +1,5 @@
 var startDate;
 var endDate;
-var promotions;
-var punishments;
-var withdrawals;
-var all_notes;
 var data_dict;
 const csrf = document.getElementsByName('csrfmiddlewaretoken')[0].value;
 
@@ -77,7 +73,6 @@ const sendSearchData = (start, end) => {
             'enddate': moment(end).format('YYYY-MM-DD'),
         },
         success: (data) => {
-            console.log(data);
             if (data.all_notes) {
                 $('#show_content').css("visibility", "visible");
                 $('#no_content').css("display", "none");
@@ -101,10 +96,12 @@ const sendSearchData = (start, end) => {
 const sendDownloadData = (data) => {
     $.ajax({
         type: 'POST',
-        url: '/',
+        url: '/statistica_download/',
         data: {
             'csrfmiddlewaretoken': csrf,
-            'pars_data': data,
+            'pars_data': JSON.stringify(data),
+            'dateInterval': moment(startDate).format('DD.MM.Y') + ' \u2013 ' + moment(endDate).format('DD.MM.Y'),
+
         },
         success: (data) => {
 
