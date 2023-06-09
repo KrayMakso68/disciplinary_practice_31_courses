@@ -37,6 +37,9 @@
             </form>
         </div>
     </div>
+     <div class="alert alert-warning text-center mt-4 mx-5" id="no_content" role="alert" style="display:none;">
+        <h4 class="mt-1">Нет данных</h4>
+    </div>
     <div class="row justify-content-center alert alert-secondary mt-5 mx-5" id="show_content" style="visibility:hidden;">
         <div class="col-5 me-5">
             <canvas id="myChart"></canvas>
@@ -59,10 +62,6 @@
                 </tbody>
             </table>
         </div>
-    </div>
-
-    <div class="alert alert-warning text-center mt-4 mx-5" id="no_content" role="alert">
-        <h4 class="mt-1">Нет данных</h4>
     </div>
 {% endblock %}
 

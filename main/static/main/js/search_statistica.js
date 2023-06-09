@@ -77,16 +77,22 @@ const sendSearchData = (start, end) => {
         },
         success: (data) => {
             console.log(data);
-            $('#show_content').css("visibility", "visible");
-            promotions = data.promotions;
-            punishments = data.punishments;
-            withdrawals = data.withdrawals;
-            all_notes = data.all_notes;
-            chart.data.datasets[0].data = [data.promotions, data.punishments, data.withdrawals]
-            chart.update();
-            chart.render();
-            $('#content_row').replaceWith(`<tr class="text-center text-nowrap" id="content_row"><td>${startDate.format('DD.MM.Y')} \u2013 ${endDate.format('DD.MM.Y')}</td><th scope="row">${all_notes}</th><td>${promotions}</td><td>${punishments}</td><td>${withdrawals}</td></tr>`);
-
+            if (data.all_notes) {
+                $('#show_content').css("visibility", "visible");
+                $('#no_content').css("display", "none");
+                promotions = data.promotions;
+                punishments = data.punishments;
+                withdrawals = data.withdrawals;
+                all_notes = data.all_notes;
+                chart.data.datasets[0].data = [data.promotions, data.punishments, data.withdrawals]
+                chart.update();
+                chart.render();
+                $('#content_row').replaceWith(`<tr class="text-center text-nowrap" id="content_row"><td>${startDate.format('DD.MM.Y')} \u2013 ${endDate.format('DD.MM.Y')}</td><th scope="row">${all_notes}</th><td>${promotions}</td><td>${punishments}</td><td>${withdrawals}</td></tr>`);
+            }
+            else{
+                $('#show_content').css("visibility", "hidden");
+                $('#no_content').css("display", "block");
+            };
         },
         error: () => {
 
