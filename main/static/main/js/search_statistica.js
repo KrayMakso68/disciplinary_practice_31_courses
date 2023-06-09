@@ -4,6 +4,7 @@ var promotions;
 var punishments;
 var withdrawals;
 var all_notes;
+var data_dict;
 const csrf = document.getElementsByName('csrfmiddlewaretoken')[0].value;
 
 $(document).ready(function () {
@@ -80,14 +81,11 @@ const sendSearchData = (start, end) => {
             if (data.all_notes) {
                 $('#show_content').css("visibility", "visible");
                 $('#no_content').css("display", "none");
-                promotions = data.promotions;
-                punishments = data.punishments;
-                withdrawals = data.withdrawals;
-                all_notes = data.all_notes;
+                data_dict = data;
                 chart.data.datasets[0].data = [data.promotions, data.punishments, data.withdrawals]
                 chart.update();
                 chart.render();
-                $('#content_row').replaceWith(`<tr class="text-center text-nowrap" id="content_row"><td>${startDate.format('DD.MM.Y')} \u2013 ${endDate.format('DD.MM.Y')}</td><th scope="row">${all_notes}</th><td>${promotions}</td><td>${punishments}</td><td>${withdrawals}</td></tr>`);
+                $('#content_row').replaceWith(`<tr class="text-center text-nowrap" id="content_row"><td>${startDate.format('DD.MM.Y')} \u2013 ${endDate.format('DD.MM.Y')}</td><th scope="row">${data.all_notes}</th><td>${data.promotions}</td><td>${data.punishments}</td><td>${data.withdrawals}</td></tr>`);
             }
             else{
                 $('#show_content').css("visibility", "hidden");
@@ -99,9 +97,32 @@ const sendSearchData = (start, end) => {
         }
     })
 }
+
+const sendDownloadData = (data) => {
+    $.ajax({
+        type: 'POST',
+        url: '/',
+        data: {
+            'csrfmiddlewaretoken': csrf,
+            'pars_data': data,
+        },
+        success: (data) => {
+
+        },
+        error: () => {
+
+        }
+    })
+}
+
 $('#search_btn').click(function(e){
     e.preventDefault();
     sendSearchData(startDate, endDate);
+});
+
+$('#download_btn').click(function(e){
+    e.preventDefault();
+    sendDownloadData(data_dict);
 });
 
 const ctx = document.getElementById('myChart');

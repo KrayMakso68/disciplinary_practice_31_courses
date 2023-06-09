@@ -11,6 +11,8 @@ from django.views.generic import ListView, DetailView, CreateView
 
 from main.models import Note, CustomUser
 
+from docxtpl import DocxTemplate
+
 
 @login_required(login_url="login/")
 def index(request):
@@ -139,3 +141,11 @@ def statistica_search(request):
                              'all_notes': all_notes
                              })
     return JsonResponse({})
+
+
+def statistica_download(request):
+    is_ajax = request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+    if is_ajax:
+        data = request.POST.get('pars_data')
+        user_node = request.user.category
+        doc = DocxTemplate("word_tpl.docx")
