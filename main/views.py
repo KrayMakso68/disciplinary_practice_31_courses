@@ -150,11 +150,13 @@ def statistica_docxcreate(request):
     if is_ajax:
         data = json.loads(request.POST.get('pars_data'))
         doc = DocxTemplate('main/static/main/docx/Statistica_template.docx')
-        # data = [data['promotions'], data['punishments'], data['withdrawals'] ]
-        # labels = ['Поощрения', 'Взыскания', 'Снятия взыскания']
-        # colors = sns.color_palette('pastel')[0:5]
-        # plt.pie(data, labels=labels, colors=colors, autopct='%.0f%%', wedgeprops=dict(width=0.3))
-        # plt.savefig('main/static/main/docx/pie.png')
+        plt_data = [data['promotions'], data['punishments'], data['withdrawals']]
+        plt_labels = ['Поощрения', 'Взыскания', 'Снятия взыскания']
+        colors = sns.color_palette('pastel')[0:5]
+        plt.switch_backend('agg')
+        plt.pie(plt_data, labels=plt_labels, colors=colors, autopct='%.0f%%', wedgeprops=dict(width=0.6))
+        plt.savefig('main/static/main/docx/pie.png')
+        plt.close()
 
         context = {
             'userNode': request.user.category,
@@ -163,7 +165,7 @@ def statistica_docxcreate(request):
             'promotions': data['promotions'],
             'punishments': data['punishments'],
             'withdrawals': data['withdrawals'],
-            # 'pieImg': InlineImage(doc, 'main/static/main/docx/pie.png')
+            'pieImg': InlineImage(doc, 'main/static/main/docx/pie.png')
         }
         doc.render(context)
         doc.save('main/static/main/docx/Statistica.docx')
