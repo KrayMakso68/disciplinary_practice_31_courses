@@ -150,9 +150,18 @@ def statistica_docxcreate(request):
     if is_ajax:
         data = json.loads(request.POST.get('pars_data'))
         doc = DocxTemplate('main/static/main/docx/Statistica_template.docx')
-        plt_data = [data['promotions'], data['punishments'], data['withdrawals']]
-        plt_labels = ['Поощрения', 'Взыскания', 'Снятия взыскания']
-        colors = sns.color_palette('pastel')[0:5]
+        plt_data = []
+        plt_labels = []
+        if data['promotions']:
+            plt_data.append(data['promotions'])
+            plt_labels.append('Поощрения')
+        if data['punishments']:
+            plt_data.append(data['punishments'])
+            plt_labels.append('Взыскания')
+        if data['withdrawals']:
+            plt_data.append(data['withdrawals'])
+            plt_labels.append('Снятия взыскания')
+        colors = sns.color_palette('pastel')[0:3]
         plt.switch_backend('agg')
         plt.pie(plt_data, labels=plt_labels, colors=colors, autopct='%.0f%%', wedgeprops=dict(width=0.6))
         plt.savefig('main/static/main/docx/pie.png')

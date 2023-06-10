@@ -19,7 +19,7 @@
         <div class="col-4">
             <form id="search-form" autocomplete="off">
                 {% csrf_token %}
-                <div class="card border-secondary p-1 shadow">
+                <div class="card border-secondary p-1 shadow" >
                     <div class="card-header">Поиск по дате</div>
                     <div class="card-body text-dark bg-light">
                         <div class="d-grid gap-2 col-12 mx-auto">
@@ -28,7 +28,7 @@
                                 <span data-feather="calendar" style="margin-bottom: 0.5%;"></span>
                                 <span></span>
                             </div>
-                            <button type="button" id="search_btn" class="btn btn-primary mt-3" data-dismiss="modal">
+                            <button type="button" id="search_btn" class="btn btn-primary mt-3" data-dismiss="modal" >
                                 Найти
                             </button>
                         </div>
@@ -40,8 +40,8 @@
      <div class="alert alert-warning text-center mt-5 mx-5" id="no_content" role="alert" style="display:none;">
         <h4 class="mt-1">Нет данных</h4>
     </div>
-    <div class="row justify-content-center alert alert-secondary mt-5 mx-5" id="show_content" style="visibility:hidden;">
-        <p>{{ request.user.category }}</p>
+    <div class="row justify-content-center alert alert-secondary mt-5 mx-5 text-center" id="show_content" style="visibility:hidden;">
+        <h4>{{ request.user.category }}</h4>
         <div class="col-5 me-5">
             <canvas id="myChart"></canvas>
         </div>
