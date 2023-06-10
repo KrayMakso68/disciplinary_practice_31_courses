@@ -3,3 +3,5 @@ pytils
 django-mptt
 django-mptt-admin
 docxtpl
+matplotlib
+seaborn

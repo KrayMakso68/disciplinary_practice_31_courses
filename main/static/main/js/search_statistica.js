@@ -96,15 +96,22 @@ const sendSearchData = (start, end) => {
 const sendDownloadData = (data) => {
     $.ajax({
         type: 'POST',
-        url: '/statistica_download/',
+        url: '/statistica_docxcreate/',
         data: {
             'csrfmiddlewaretoken': csrf,
             'pars_data': JSON.stringify(data),
             'dateInterval': moment(startDate).format('DD.MM.Y') + ' \u2013 ' + moment(endDate).format('DD.MM.Y'),
-
         },
-        success: (data) => {
-
+        dataType: 'binary',
+		xhrFields: {
+			'responseType': 'blob'
+		},
+        success: (data, status, xhr) => {
+            var blob = new Blob([data], {type: xhr.getResponseHeader('Content-Type')});
+			var link = document.createElement('a');
+			link.href = window.URL.createObjectURL(blob);
+			link.download = 'Statistica.docx';
+			link.click();
         },
         error: () => {
 

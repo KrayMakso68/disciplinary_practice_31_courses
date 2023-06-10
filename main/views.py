@@ -1,11 +1,12 @@
 import json
-from io import StringIO
+import matplotlib.pyplot as plt
+import seaborn as sns
 
-from docxtpl import DocxTemplate
+from docxtpl import DocxTemplate, InlineImage
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import LoginView
-from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse, FileResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from main.forms import UserLoginForm, NoteCreateForm
@@ -13,7 +14,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.views.generic import ListView, DetailView, CreateView
 from main.models import Note, CustomUser
-
 
 
 @login_required(login_url="login/")
@@ -120,9 +120,9 @@ def statistica_search(request):
     if is_ajax:
         startdate = request.POST.get('startdate')
         enddate = request.POST.get('enddate')
-        promotions = 0       #поощрения
-        punishments = 0      #взыскания
-        withdrawals = 0      #снятие взяскания
+        promotions = 0  # поощрения
+        punishments = 0  # взыскания
+        withdrawals = 0  # снятие взяскания
         user_node = request.user.category
         all_lower_nodes = user_node.get_descendants(include_self=True)
         for node in all_lower_nodes:
@@ -145,11 +145,17 @@ def statistica_search(request):
     return JsonResponse({})
 
 
-def statistica_download(request):
+def statistica_docxcreate(request):
     is_ajax = request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
     if is_ajax:
         data = json.loads(request.POST.get('pars_data'))
         doc = DocxTemplate('main/static/main/docx/Statistica_template.docx')
+        # data = [data['promotions'], data['punishments'], data['withdrawals'] ]
+        # labels = ['Поощрения', 'Взыскания', 'Снятия взыскания']
+        # colors = sns.color_palette('pastel')[0:5]
+        # plt.pie(data, labels=labels, colors=colors, autopct='%.0f%%', wedgeprops=dict(width=0.3))
+        # plt.savefig('main/static/main/docx/pie.png')
+
         context = {
             'userNode': request.user.category,
             'dateInterval': request.POST.get('dateInterval'),
@@ -157,11 +163,20 @@ def statistica_download(request):
             'promotions': data['promotions'],
             'punishments': data['punishments'],
             'withdrawals': data['withdrawals'],
-            'pieImg': '',
+            # 'pieImg': InlineImage(doc, 'main/static/main/docx/pie.png')
         }
         doc.render(context)
         doc.save('main/static/main/docx/Statistica.docx')
-        #тута нужна выгрузка файла пользователю на скачивание!!!
 
-        return JsonResponse({})
+        file_location = 'main/static/main/docx/Statistica.docx'
+
+        with open(file_location, 'rb') as worddoc:  # read as binary
+            content = worddoc.read()  # Read the file
+            response = HttpResponse(
+                content,
+                content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+            )
+            response['Content-Disposition'] = 'attachment; filename=Statistica.docx'
+            response['Content-Length'] = len(content)  # calculate length of content
+            return response
     return JsonResponse({})
