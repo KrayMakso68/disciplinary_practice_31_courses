@@ -57,7 +57,7 @@ class UserNoteView(DetailView):
 
 class GroupsContentView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     def test_func(self):
-        return self.request.user.role > CustomUser.LS
+        return self.request.user.role > CustomUser.EMPLOYEE
 
     model = CustomUser
     context_object_name = 'cadets'
@@ -83,7 +83,7 @@ class GroupsContentView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 
 class NoteCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     def test_func(self):
-        return self.request.user.role > CustomUser.LS
+        return self.request.user.role > CustomUser.EMPLOYEE
 
     model = Note
     form_class = NoteCreateForm
@@ -130,9 +130,9 @@ def statistica_search(request):
             for cadet in cadets:
                 notes = cadet.notes.all().filter(date__range=[startdate, enddate])
                 for note in notes:
-                    if note.type == 'Поощрение':
+                    if note.type in ('Достижение', 'Поощрение'):
                         promotions = promotions + 1
-                    elif note.type == 'Взыскание':
+                    elif note.type in ('Замечание', 'Взыскание'):
                         punishments = punishments + 1
                     else:
                         withdrawals = withdrawals + 1
@@ -154,13 +154,13 @@ def statistica_docxcreate(request):
         plt_labels = []
         if data['promotions']:
             plt_data.append(data['promotions'])
-            plt_labels.append('Поощрения')
+            plt_labels.append('Достижения')
         if data['punishments']:
             plt_data.append(data['punishments'])
-            plt_labels.append('Взыскания')
+            plt_labels.append('Замечания')
         if data['withdrawals']:
             plt_data.append(data['withdrawals'])
-            plt_labels.append('Снятия взыскания')
+            plt_labels.append('Устранения замечаний')
         colors = sns.color_palette('pastel')[0:3]
         plt.switch_backend('agg')
         plt.pie(plt_data, labels=plt_labels, colors=colors, autopct='%.0f%%', wedgeprops=dict(width=0.6))

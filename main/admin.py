@@ -5,16 +5,23 @@ from .models import CustomUser, Note, Category
 from django.contrib.auth.admin import UserAdmin
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 
+admin.site.site_header = "Панель управления • Workforce Operations"
+admin.site.site_title = "Workforce Operations Admin"
+admin.site.index_title = "Управление корпоративной структурой и персоналом"
 
-class Slug_Admin(admin.ModelAdmin):
+
+class NoteAdmin(admin.ModelAdmin):
     readonly_fields = ('slug',)
+    list_display = ('id', 'type', 'cadet', 'who_gave', 'date', 'check_active')
+    list_filter = ('type', 'check_active', 'date')
+    search_fields = ('cadet__last_name', 'who_gave__last_name', 'text')
 
 
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = CustomUser
-    list_display = ("username", "role", "rang", "last_name", "first_name", "surname", "is_active",)
+    list_display = ("username", "role", "rang", "last_name", "first_name", "surname", "category", "is_active",)
     list_filter = ("role", "rang", "is_active",)
     fieldsets = (
         ("О пользователе", {"fields": ("rang", "last_name", "first_name", "surname", "role", "category", "password")}),
@@ -45,4 +52,4 @@ class CategoryAdmin(DjangoMpttAdmin):
 
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(CustomUser, CustomUserAdmin)
-admin.site.register(Note, Slug_Admin)
+admin.site.register(Note, NoteAdmin)

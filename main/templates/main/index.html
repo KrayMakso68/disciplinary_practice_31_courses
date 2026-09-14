@@ -8,11 +8,13 @@
 
 {% block content %}
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2 ms-4">Главная</h1>
+        <h1 class="h5 fw-bold text-dark mb-0">Главная панель</h1>
+        <div class="text-muted small">
+            Текущая сессия: <strong>{{ request.user.username }}</strong>
+        </div>
     </div>
 
-
-    <div class="p-4 mb-4 bg-light rounded-3">
+    <div class="carousel-wrapper mb-4">
         <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
             <div class="carousel-indicators">
                 {% if request.user.role == 1 %}
@@ -20,39 +22,36 @@
                         aria-current="true" aria-label="Slide 1"></button>
                 {% elif request.user.role > 1 %}
                 <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active"
-                        aria-label="Slide 2"></button>
+                        aria-label="Slide 1"></button>
                 <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1"
-                        aria-label="Slide 3"></button>
+                        aria-label="Slide 2"></button>
                 {% endif %}
             </div>
             <div class="carousel-inner">
                 {% if request.user.role == 1 %}
-                <div class="carousel-item active" data-bs-interval="3000">
-                    <img src="{% static 'main/img/slider.svg' %}#svgView(viewBox(0,0,1200,400))" class="d-block w-100" alt="...">
-                    <div class="container m-0">
-                        <div class="carousel-caption d-none d-md-block text-end m-0 pb-5 mb-5">
-                            <h3 class="text-white mb-3">Мои записи</h3>
-                            <a class="btn btn-light btn-lg" href="{% url 'view_user_notes' slug=request.user.slug %}">Смотреть</a>
-                        </div>
+                <div class="carousel-item active" data-bs-interval="4000">
+                    <img src="{% static 'main/img/slider.svg' %}#svgView(viewBox(0,0,1200,400))" class="d-block w-100 banner-img" alt="Мои записи">
+                    <div class="carousel-caption d-none d-md-block text-end pe-4 pb-3 mb-1">
+                        <h5 class="text-white mb-1 fw-semibold">Мои записи</h5>
+                        <p class="text-white-50 small mb-2">История достижений и замечаний</p>
+                        <a class="btn btn-light btn-sm fw-semibold shadow-sm px-3" href="{% url 'view_user_notes' slug=request.user.slug %}">Смотреть</a>
                     </div>
                 </div>
                 {% elif request.user.role > 1 %}
-                <div class="carousel-item active" data-bs-interval="3000">
-                    <img src="{% static 'main/img/slider.svg' %}#svgView(viewBox(0,400,1200,400))" class="d-block w-100" alt="...">
-                    <div class="container m-0">
-                        <div class="carousel-caption d-none d-md-block text-start pb-5 m-0 mb-5">
-                            <h4 class="text-white mb-3">Записи подразделения</h4>
-                            <a class="btn btn-light btn-lg" href="{% url 'view_group_content' %}">Смотреть</a>
-                        </div>
+                <div class="carousel-item active" data-bs-interval="4000">
+                    <img src="{% static 'main/img/slider.svg' %}#svgView(viewBox(0,400,1200,400))" class="d-block w-100 banner-img" alt="Записи подразделения">
+                    <div class="carousel-caption d-none d-md-block text-start ps-4 pb-3 mb-1">
+                        <h5 class="text-white mb-1 fw-semibold">Записи подразделения</h5>
+                        <p class="text-white-50 small mb-2">Управление персоналом и журналом событий</p>
+                        <a class="btn btn-light btn-sm fw-semibold shadow-sm px-3" href="{% url 'view_group_content' %}">Смотреть</a>
                     </div>
                 </div>
-                <div class="carousel-item" data-bs-interval="3000">
-                    <img src="{% static 'main/img/slider.svg' %}#svgView(viewBox(0,800,1200,400))" class="d-block w-100" alt="...">
-                    <div class="container m-0">
-                        <div class="carousel-caption d-none d-md-block text-end m-0 mb-5 pb-5">
-                            <h4 class="mb-3">Статистика подразделения</h4>
-                            <a class="btn btn-dark btn-lg" href="{% url 'statistica' %}">Смотреть</a>
-                        </div>
+                <div class="carousel-item" data-bs-interval="4000">
+                    <img src="{% static 'main/img/slider.svg' %}#svgView(viewBox(0,800,1200,400))" class="d-block w-100 banner-img" alt="Статистика подразделения">
+                    <div class="carousel-caption d-none d-md-block text-end pe-4 pb-3 mb-1">
+                        <h5 class="text-white mb-1 fw-semibold">Сводная аналитика</h5>
+                        <p class="text-white-50 small mb-2">Отчёты и показатели эффективности команды</p>
+                        <a class="btn btn-primary btn-sm fw-semibold shadow-sm px-3" href="{% url 'statistica' %}">Смотреть</a>
                     </div>
                 </div>
                 {% endif %}
@@ -60,15 +59,13 @@
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark"
                     data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
+                <span class="visually-hidden">Предыдущий</span>
             </button>
             <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark"
                     data-bs-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
+                <span class="visually-hidden">Следующий</span>
             </button>
         </div>
     </div>
-
-
 {% endblock %}

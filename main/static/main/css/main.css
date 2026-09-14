@@ -1,5 +1,7 @@
 body {
   font-size: .875rem;
+  background-color: #f8f9fa;
+  color: #212529;
 }
 
 .feather {
@@ -11,84 +13,86 @@ body {
 /*
  * Sidebar
  */
-
 .sidebar {
   position: fixed;
   top: 0;
-  /* rtl:raw:
-  right: 0;
-  */
   bottom: 0;
-  /* rtl:remove */
   left: 0;
   z-index: 100; /* Behind the navbar */
-  padding: 100px 0 0; /* Height of navbar */
-  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+  padding: 60px 0 0; /* Height of navbar */
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .07);
+  background-color: #ffffff !important;
 }
 
 @media (max-width: 767.98px) {
   .sidebar {
-    top: 5rem;
+    top: 3.5rem;
   }
 }
 
 .sidebar-sticky {
   position: relative;
   top: 0;
-  height: calc(100vh - 75px);
-  padding-top: .5rem;
+  height: calc(100vh - 60px);
+  padding-top: .75rem;
   overflow-x: hidden;
-  overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+  overflow-y: auto;
 }
 
 .sidebar .nav-link {
-  font-weight: 600;
-  color: #333;
-  font-size: 1.05rem;
+  font-weight: 500;
+  color: #495057;
+  font-size: 0.88rem;
+  padding: 0.45rem 1rem;
+  border-radius: 6px;
+  margin: 0.1rem 0.5rem;
+  transition: all .15s ease-in-out;
 }
 
 .sidebar .nav-link .feather {
-  margin-right: 4px;
-  margin-bottom: 4px;
-  color: #727272;
+  margin-right: 8px;
+  margin-bottom: 2px;
+  color: #6c757d;
 }
 
-.sidebar .nav-link{
-  transition: transform .3s ease-out;
-}
-
-.sidebar .nav-link:hover{
-  transform: scale(1.05);
+.sidebar .nav-link:hover {
+  color: #0d6efd;
+  background-color: rgba(13, 110, 253, 0.08);
 }
 
 .sidebar .nav-link.active {
-  color: #2470dc;
+  color: #0d6efd;
+  font-weight: 600;
+  background-color: rgba(13, 110, 253, 0.08);
 }
 
 .sidebar .nav-link:hover .feather,
 .sidebar .nav-link.active .feather {
-  color: inherit;
+  color: #0d6efd;
 }
 
 .sidebar-heading {
-  font-size: .75rem;
+  font-size: .68rem;
+  font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: .06rem;
+  color: #8c98a4 !important;
 }
 
 /*
  * Navbar
  */
-
 .navbar-brand {
-  padding-top: .75rem;
-  padding-bottom: .75rem;
-  font-size: 1.15rem;
-  background-color: rgba(0, 0, 0, .25);
-  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
+  padding-top: .4rem;
+  padding-bottom: .4rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  background-color: transparent;
+  box-shadow: none;
 }
 
 .nav-el {
-  font-size: 1.1rem;
+  font-size: 0.9rem;
 }
 
 .navbar .navbar-toggler {
@@ -96,31 +100,71 @@ body {
   right: 1rem;
 }
 
-/*.navbar .form-control {*/
-/*  padding: .75rem 1rem;*/
-/*  border-width: 0;*/
-/*  border-radius: 0;*/
-/*}*/
+/*
+ * Banner / Carousel styling
+ */
+.carousel-wrapper {
+  max-width: 820px;
+  margin: 0 auto;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+}
 
-/*.form-control-dark {*/
-/*  color: #fff;*/
-/*  background-color: rgba(255, 255, 255, .1);*/
-/*  border-color: rgba(255, 255, 255, .1);*/
-/*}*/
+.banner-img {
+  max-height: 220px;
+  object-fit: cover;
+}
 
-/*.form-control-dark:focus {*/
-/*  border-color: transparent;*/
-/*  box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);*/
-/*}*/
+.carousel-caption {
+  padding-bottom: 1.25rem;
+}
+
+/*
+ * Card & Table refinements
+ */
+.card {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.card-header {
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.table th, .table td {
+  padding: 0.55rem 0.75rem;
+  font-size: 0.84rem;
+}
+
+/* Subtle Badges */
+.bg-success-subtle {
+  background-color: #d1e7dd !important;
+  color: #0f5132 !important;
+}
+
+.bg-danger-subtle {
+  background-color: #f8d7da !important;
+  color: #842029 !important;
+}
+
+.bg-secondary-subtle {
+  background-color: #e2e3e5 !important;
+  color: #41464b !important;
+}
 
 .btn-circle.btn-sm {
-  width: 45px;
-  height: 45px;
-  padding-top: 0px;
-  padding-bottom: 3px;
-  border-radius: 60px;
-  font-size: 26px;
-  text-align: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .not-visible {

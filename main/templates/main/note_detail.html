@@ -7,40 +7,51 @@
 
 
 {% block content %}
-    <h2 class="mt-4 ms-2"><a onclick="history.back();"><button class="btn btn-outline-secondary btn-circle btn-sm mb-2 me-3"><</button></a>Запись</h2>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-7">
-                <div class="card">
-                    <div class="card-header text-muted">
-                        Кому дано:
+    <div class="d-flex align-items-center mb-3 mt-3">
+        <button onclick="history.back();" class="btn btn-sm btn-outline-secondary me-3 d-inline-flex align-items-center gap-1 py-1 px-2" style="font-size: 0.82rem;">
+            <span data-feather="arrow-left" style="width: 14px; height: 14px;"></span> Назад
+        </button>
+        <h2 class="h5 mb-0 fw-semibold text-dark">Карточка записи</h2>
+    </div>
+
+    <div class="content-container mx-auto" style="max-width: 720px;">
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white py-2 px-3 border-bottom d-flex justify-content-between align-items-center">
+                <h5 class="h6 mb-0 fw-semibold text-dark">Детали записи</h5>
+                <span class="small text-muted">{{ note.date|date:"d.m.Y" }}</span>
+            </div>
+            <div class="card-body p-4">
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <div class="text-muted small fw-semibold text-uppercase mb-1" style="font-size: 0.72rem; letter-spacing: 0.5px;">Сотрудник</div>
+                        <div class="fs-6 fw-semibold text-dark">{{ note.cadet.get_FIO }}</div>
+                        {% if note.cadet.category %}
+                        <div class="small text-muted">{{ note.cadet.category }}</div>
+                        {% endif %}
                     </div>
-                    <div class="card-body">
-                        <h5 class="h5 mb-0">{{ note.cadet.get_FIO }}</h5>
+                    <div class="col-sm-6">
+                        <div class="text-muted small fw-semibold text-uppercase mb-1" style="font-size: 0.72rem; letter-spacing: 0.5px;">Вид записи</div>
+                        <div>
+                            {% if "Достижение" in note.type or "Поощрение" in note.type %}
+                                <span class="badge bg-success-subtle text-success-emphasis border border-success-subtle fw-medium">{{ note.type }}</span>
+                            {% elif "Замечание" in note.type %}
+                                <span class="badge bg-danger-subtle text-danger-emphasis border border-danger-subtle fw-medium">{{ note.type }}</span>
+                            {% else %}
+                                <span class="badge bg-secondary-subtle text-secondary-emphasis border border-secondary-subtle fw-medium">{{ note.type }}</span>
+                            {% endif %}
+                        </div>
                     </div>
-                    <div class="card-header text-muted">
-                        Вид записи:
+                    <div class="col-sm-6">
+                        <div class="text-muted small fw-semibold text-uppercase mb-1" style="font-size: 0.72rem; letter-spacing: 0.5px;">Инициатор / Руководитель</div>
+                        <div class="fs-6 text-dark">{{ note.who_gave.get_FIO }}</div>
                     </div>
-                    <div class="card-body">
-                        <h5 class="h5 mb-0">{{ note.type }}</h5>
+                    <div class="col-sm-6">
+                        <div class="text-muted small fw-semibold text-uppercase mb-1" style="font-size: 0.72rem; letter-spacing: 0.5px;">Дата регистрации</div>
+                        <div class="fs-6 text-dark">{{ note.date|date:"d E Y" }} г.</div>
                     </div>
-                    <div class="card-header text-muted">
-                        Кем дано:
-                    </div>
-                    <div class="card-body">
-                        <h5 class="h5 mb-0">{{ note.who_gave.get_FIO }}</h5>
-                    </div>
-                    <div class="card-header text-muted">
-                        Текст записи:
-                    </div>
-                    <div class="card-body">
-                        <h5 class="h5 mb-0">{{ note.text }}</h5>
-                    </div>
-                    <div class="card-header text-muted">
-                        Дата записи:
-                    </div>
-                    <div class="card-body">
-                        <h5 class="h5 mb-0">{{ note.date|date:"d.m.Y" }}</h5>
+                    <div class="col-12 pt-2 border-top">
+                        <div class="text-muted small fw-semibold text-uppercase mb-2" style="font-size: 0.72rem; letter-spacing: 0.5px;">Содержание / Обоснование</div>
+                        <div class="p-3 bg-light rounded-2 text-dark" style="white-space: pre-wrap; font-size: 0.92rem; line-height: 1.5;">{{ note.text }}</div>
                     </div>
                 </div>
             </div>

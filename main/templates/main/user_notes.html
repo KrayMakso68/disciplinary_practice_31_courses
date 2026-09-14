@@ -7,36 +7,66 @@
 
 
 {% block content %}
-    <h2 class="mt-4 ms-2"><a onclick="history.back();"><button class="btn btn-outline-secondary btn-circle btn-sm mb-2 me-3"><</button></a>Записи</h2>
-    <h4 class="mt-4 mx-5 bg-light w-25 border-bottom">{{ user.get_FIO }}</h4>
-    {% if user_notes %}
-    <div class="table-responsive mt-4 mx-5">
-        <table class="table table-striped">
-            <thead class="table-dark">
-            <tr>
-                <th scope="col">№</th>
-                <th scope="col">Запись</th>
-                <th scope="col">Кем дано</th>
-                <th scope="col">Дата</th>
-                <th scope="col"></th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for note in user_notes %}
-                <tr>
-                    <th scope="row">{{ forloop.counter }}</th>
-                    <td>{{ note.type }}</td>
-                    <td>{{ note.who_gave.get_FIO }}</td>
-                    <td>{{ note.date|date:"d.m.Y" }}</td>
-                    <td class="text-end"><a class="btn btn-sm btn-warning" href="{% url 'user_note_detail' slug=note.slug %}">Подробнее</a></td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    {% else %}
-        <div class="alert alert-warning text-center mt-4 mx-5" role="alert">
-            <h4 class="mt-1">Нет записей</h4>
+    <div class="d-flex align-items-center mb-3 mt-3">
+        <button onclick="history.back();" class="btn btn-sm btn-outline-secondary me-3 d-inline-flex align-items-center gap-1 py-1 px-2" style="font-size: 0.82rem;">
+            <span data-feather="arrow-left" style="width: 14px; height: 14px;"></span> Назад
+        </button>
+        <div>
+            <h2 class="h5 mb-0 fw-semibold text-dark">Личное дело / Записи</h2>
+            <div class="text-muted small">{{ user.get_FIO }}{% if user.category %} • {{ user.category }}{% endif %}</div>
         </div>
-    {% endif %}
+    </div>
+
+    <div class="content-container mx-auto" style="max-width: 900px;">
+        {% if user_notes %}
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white py-2 px-3 border-bottom d-flex justify-content-between align-items-center">
+                <h5 class="h6 mb-0 fw-semibold text-dark">История записей</h5>
+                <span class="badge bg-light text-muted border fw-normal">{{ user_notes|length }} записей</span>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr class="small text-muted">
+                                <th scope="col" class="ps-3" style="width: 50px;">#</th>
+                                <th scope="col">Вид записи</th>
+                                <th scope="col">Кем внесено</th>
+                                <th scope="col">Дата</th>
+                                <th scope="col" class="text-end pe-3">Действие</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for note in user_notes %}
+                            <tr>
+                                <th scope="row" class="ps-3 text-muted fw-normal small">{{ forloop.counter }}</th>
+                                <td>
+                                    {% if "Достижение" in note.type or "Поощрение" in note.type %}
+                                        <span class="badge bg-success-subtle text-success-emphasis border border-success-subtle fw-normal">{{ note.type }}</span>
+                                    {% elif "Замечание" in note.type %}
+                                        <span class="badge bg-danger-subtle text-danger-emphasis border border-danger-subtle fw-normal">{{ note.type }}</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary-subtle text-secondary-emphasis border border-secondary-subtle fw-normal">{{ note.type }}</span>
+                                    {% endif %}
+                                </td>
+                                <td class="small">{{ note.who_gave.get_FIO }}</td>
+                                <td class="small text-muted">{{ note.date|date:"d.m.Y" }}</td>
+                                <td class="text-end pe-3">
+                                    <a class="btn btn-sm btn-outline-primary py-1 px-2" style="font-size: 0.8rem;" href="{% url 'user_note_detail' slug=note.slug %}">Подробнее</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% else %}
+            <div class="card shadow-sm border-0 text-center py-5">
+                <div class="card-body">
+                    <p class="text-muted mb-0">У сотрудника пока нет записей в журнале</p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}

@@ -1,47 +1,51 @@
 {% load static %}
 
 <!doctype html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Вход</title>
+    <title>Вход | Enterprise Operations System</title>
     <link rel="stylesheet" href="{% static 'main/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'main/css/login.css' %}">
-
 </head>
 <body class="text-center">
 <main class="form-signin">
     <form method="post" class="shadow">
         {% csrf_token %}
-        <div class="m-5 py-3">
-            <img class="mb-4 mt-3" src="{% static 'main/img/e1470_fso.png' %}" alt="" height="100">
-            <h1 class="h2 mb-3 fw-normal ">Вход в систему</h1>
+        <div class="p-4">
+            <div class="mb-3 mt-1 d-flex justify-content-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="#0d6efd" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+            </div>
+            <h2 class="h5 mb-1 fw-bold text-dark">Вход в систему</h2>
+            <p class="text-muted small mb-4">Enterprise Operations System</p>
             <div>
-                <div class="form-floating mb-1">
+                <div class="form-floating mb-2">
                     {{ form.username }}
                     <label class="text-muted" for="{{ form.username.id_for_label }}">Логин</label>
                 </div>
-                <div class="form-floating">
+                <div class="form-floating mb-3">
                     {{ form.password }}
                     <label class="text-muted" for="{{ form.password.id_for_label }}">Пароль</label>
                 </div>
                 {% if form.non_field_errors %}
-                <div class="alert alert-danger" role="alert">
+                <div class="alert alert-danger mt-2 py-1 small" role="alert">
                     {% for error in form.non_field_errors %}
                     {{ error }}
                     {% endfor %}
                 </div>
-                {% else %}
-                    <div class="cor"></div>
                 {% endif %}
-                <button class="w-100 btn btn-lg btn-primary" type="submit">Войти</button>
-                <p class="mt-5 mb-3 text-muted fw-light">Академия ФСО России</p>
-
+                <button class="w-100 btn btn-primary py-2 fw-medium mt-2" type="submit">Войти</button>
+                <p class="mt-4 mb-1 text-muted small fw-light">Workforce & Discipline Tracking</p>
             </div>
+        </div>
     </form>
 </main>
-
 
 </body>
 </html>

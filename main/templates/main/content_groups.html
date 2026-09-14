@@ -7,119 +7,154 @@
 
 
 {% block content %}
-    <h2 class="mt-4 ms-2"><a onclick="history.back();">
-        <button class="btn btn-outline-secondary btn-circle btn-sm mb-2 me-3"><</button>
-    </a>{{ main_node }}</h2>
-    <div class="container mt-4">
-        <div class="row justify-content-center">
-            {% if main_node.is_leaf_node %}
-                <div class="alert alert-secondary px-5 pb-0 pt-4 justify-content-center w-75">
-                <div class="col mb-4">
-                    <div class="card">
-                        <div class="card-header h5">
-                            {{ main_node }}
-                        </div>
-                        <div class="card-body">
-                            <table class="table table-striped ">
-                                <tbody>
-                                {% for cadet in cadets %}
-                                    <tr>
-                                        <th scope="row">{{ forloop.counter }}</th>
-                                        <td>{{ cadet.get_FIO }}</td>
-                                        <td class="text-end">
-                                            <a class="btn btn-sm btn-success" href="{% url 'create_note' slug=cadet.slug %}">Добавить запись</a>
-                                            <a class="btn btn-sm btn-warning" href="{% url 'view_user_notes' slug=cadet.slug %}">Подробнее</a>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
+    <div class="d-flex align-items-center mb-3 mt-3">
+        <button onclick="history.back();" class="btn btn-sm btn-outline-secondary me-3 d-inline-flex align-items-center gap-1 py-1 px-2" style="font-size: 0.82rem;">
+            <span data-feather="arrow-left" style="width: 14px; height: 14px;"></span> Назад
+        </button>
+        <h2 class="h5 mb-0 fw-semibold text-dark">{{ main_node }}</h2>
+    </div>
+
+    <div class="content-container mx-auto" style="max-width: 900px;">
+        {% if main_node.is_leaf_node %}
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-white py-2 px-3 border-bottom d-flex justify-content-between align-items-center">
+                    <h5 class="h6 mb-0 fw-semibold text-dark">{{ main_node }}</h5>
+                    <span class="badge bg-light text-muted border fw-normal">{{ cadets|length }} сотр.</span>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr class="small text-muted">
+                                    <th scope="col" class="ps-3" style="width: 50px;">#</th>
+                                    <th scope="col">Сотрудник</th>
+                                    <th scope="col" class="text-end pe-3">Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for cadet in cadets %}
+                                <tr>
+                                    <th scope="row" class="ps-3 text-muted fw-normal small">{{ forloop.counter }}</th>
+                                    <td class="fw-medium">{{ cadet.get_FIO }}</td>
+                                    <td class="text-end pe-3">
+                                        <a class="btn btn-sm btn-outline-success py-1 px-2 me-1" style="font-size: 0.8rem;" href="{% url 'create_note' slug=cadet.slug %}">Добавить запись</a>
+                                        <a class="btn btn-sm btn-outline-primary py-1 px-2" style="font-size: 0.8rem;" href="{% url 'view_user_notes' slug=cadet.slug %}">Подробнее</a>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted py-3 small">Нет сотрудников</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
+            </div>
+        {% elif main_node.type == "group" %}
+            {% for child_node in main_node.get_children %}
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-white py-2 px-3 border-bottom d-flex justify-content-between align-items-center">
+                    <h5 class="h6 mb-0 fw-semibold text-dark">{{ child_node }}</h5>
+                    <span class="badge bg-light text-muted border fw-normal">{{ child_node.staff.count }} сотр.</span>
                 </div>
-            {% elif main_node.type == "group" %}
-                <div class="alert alert-secondary px-5 pb-0 pt-4 justify-content-center w-75">
-                {% for child_node in main_node.get_children %}
-                <div class="col mb-4">
-                    <div class="card">
-                        <div class="card-header h5">
-                            {{ child_node }}
-                        </div>
-                        <div class="card-body">
-                            <table class="table table-striped ">
-                                <tbody>
-                                {% for cadet in child_node.staff.all|dictsort:"last_name" %}
-                                    <tr>
-                                        <th scope="row">{{ forloop.counter }}</th>
-                                        <td>{{ cadet.get_FIO }}</td>
-                                        <td class="text-end">
-                                            <a class="btn btn-sm btn-success" href="{% url 'create_note' slug=cadet.slug %}">Добавить запись</a>
-                                            <a class="btn btn-sm btn-warning" href="{% url 'view_user_notes' slug=cadet.slug %}">Подробнее</a>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr class="small text-muted">
+                                    <th scope="col" class="ps-3" style="width: 50px;">#</th>
+                                    <th scope="col">Сотрудник</th>
+                                    <th scope="col" class="text-end pe-3">Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for cadet in child_node.staff.all|dictsort:"last_name" %}
+                                <tr>
+                                    <th scope="row" class="ps-3 text-muted fw-normal small">{{ forloop.counter }}</th>
+                                    <td class="fw-medium">{{ cadet.get_FIO }}</td>
+                                    <td class="text-end pe-3">
+                                        <a class="btn btn-sm btn-outline-success py-1 px-2 me-1" style="font-size: 0.8rem;" href="{% url 'create_note' slug=cadet.slug %}">Добавить запись</a>
+                                        <a class="btn btn-sm btn-outline-primary py-1 px-2" style="font-size: 0.8rem;" href="{% url 'view_user_notes' slug=cadet.slug %}">Подробнее</a>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted py-3 small">Нет сотрудников</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                {% endfor %}
-                </div>
-            {% elif main_node.type == "platoon" %}
-                {% for child_node in main_node.get_children %}
-                    {% with forloop.counter as one %}
-                        <div class="alert alert-secondary px-5 pb-0 pt-4 justify-content-center w-75">
-                            <div class="row row-cols-2 justify-content-between">
-                                <div class="col-4">
-                                    <h2 class="alert-heading mb-3">{{ child_node }}</h2>
-                                </div>
-                                <div class="col-8">
-                                    <table class="table table-striped ">
-                                        <tbody>
-                                        {% for kg in child_node.staff.all %}
-                                            <tr>
-                                                <th scope="row">Командир группы</th>
-                                                <td>{{ kg.get_FIO }}</td>
-                                                <td class="text-end">
-                                                    <a class="btn btn-sm btn-success" href="{% url 'create_note' slug=kg.slug %}">Добавить запись</a>
-                                                    <a class="btn btn-sm btn-warning"
-                                                       href="{% url 'view_user_notes' slug=kg.slug %}">Подробнее</a>
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
+            </div>
+            {% endfor %}
+        {% elif main_node.type == "platoon" %}
+            {% for child_node in main_node.get_children %}
+                {% with forloop.counter as one %}
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-header bg-light py-2 px-3 border-bottom d-flex justify-content-between align-items-center">
+                        <h5 class="h6 mb-0 fw-bold text-dark">{{ child_node }}</h5>
+                    </div>
+                    <div class="card-body p-3">
+                        {% if child_node.staff.all %}
+                        <div class="mb-3">
+                            <div class="text-muted small mb-2 fw-semibold text-uppercase" style="font-size: 0.72rem; letter-spacing: 0.5px;">Руководство направления</div>
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover align-middle mb-0 border">
+                                    <tbody>
+                                    {% for lead in child_node.staff.all %}
+                                        <tr>
+                                            <td class="ps-3 text-muted small" style="width: 200px;">Руководитель направления</td>
+                                            <td class="fw-medium">{{ lead.get_FIO }}</td>
+                                            <td class="text-end pe-3">
+                                                <a class="btn btn-sm btn-outline-success py-1 px-2 me-1" style="font-size: 0.8rem;" href="{% url 'create_note' slug=lead.slug %}">Добавить запись</a>
+                                                <a class="btn btn-sm btn-outline-primary py-1 px-2" style="font-size: 0.8rem;" href="{% url 'view_user_notes' slug=lead.slug %}">Подробнее</a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
                             </div>
-                            <div class="accordion accordion-flush mb-5" id="accordionFlushExample">
-                                {% for node in child_node.get_children %}
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header" id="heading{{ one }}{{ forloop.counter }}">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                                    data-bs-target="#flush-collapse{{ one }}{{ forloop.counter }}" aria-expanded="false"
-                                                    aria-controls="flush-collapse{{ one }}{{ forloop.counter }}">
-                                                <h5>
-                                                    {{ node }}
-                                                </h5>
-                                            </button>
-                                        </h2>
-                                        <div id="flush-collapse{{ one }}{{ forloop.counter }}" class="accordion-collapse collapse"
-                                             aria-labelledby="flush-heading{{ one }}{{ forloop.counter }}" data-bs-parent="#accordionFlushExample">
-                                            <div class="accordion-body">
-                                                <table class="table table-striped ">
+                        </div>
+                        {% endif %}
+
+                        <div class="accordion accordion-flush border rounded-2" id="accordionFlushExample{{ one }}">
+                            {% for node in child_node.get_children %}
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="heading{{ one }}{{ forloop.counter }}">
+                                        <button class="accordion-button collapsed py-2 px-3" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#flush-collapse{{ one }}{{ forloop.counter }}" aria-expanded="false"
+                                                aria-controls="flush-collapse{{ one }}{{ forloop.counter }}">
+                                            <span class="fw-semibold text-dark" style="font-size: 0.88rem;">{{ node }}</span>
+                                            <span class="badge bg-secondary-subtle text-secondary-emphasis ms-2 small fw-normal">{{ node.staff.count }} сотр.</span>
+                                        </button>
+                                    </h2>
+                                    <div id="flush-collapse{{ one }}{{ forloop.counter }}" class="accordion-collapse collapse"
+                                         aria-labelledby="flush-heading{{ one }}{{ forloop.counter }}" data-bs-parent="#accordionFlushExample{{ one }}">
+                                        <div class="accordion-body p-0">
+                                            <div class="table-responsive">
+                                                <table class="table table-hover align-middle mb-0">
+                                                    <thead class="table-light">
+                                                        <tr class="small text-muted">
+                                                            <th scope="col" class="ps-3" style="width: 50px;">#</th>
+                                                            <th scope="col">Сотрудник</th>
+                                                            <th scope="col" class="text-end pe-3">Действия</th>
+                                                        </tr>
+                                                    </thead>
                                                     <tbody>
                                                     {% for cadet in node.staff.all|dictsort:"last_name" %}
                                                         <tr>
-                                                            <th scope="row">{{ forloop.counter }}</th>
-                                                            <td>{{ cadet.get_FIO }}</td>
-                                                            <td class="text-end">
-                                                                <a class="btn btn-sm btn-success"
-                                                                   href="{% url 'create_note' slug=cadet.slug %}">Добавить
-                                                                    запись</a>
-                                                                <a class="btn btn-sm btn-warning"
-                                                                   href="{% url 'view_user_notes' slug=cadet.slug %}">Подробнее</a>
+                                                            <th scope="row" class="ps-3 text-muted fw-normal small">{{ forloop.counter }}</th>
+                                                            <td class="fw-medium">{{ cadet.get_FIO }}</td>
+                                                            <td class="text-end pe-3">
+                                                                <a class="btn btn-sm btn-outline-success py-1 px-2 me-1" style="font-size: 0.8rem;" href="{% url 'create_note' slug=cadet.slug %}">Добавить запись</a>
+                                                                <a class="btn btn-sm btn-outline-primary py-1 px-2" style="font-size: 0.8rem;" href="{% url 'view_user_notes' slug=cadet.slug %}">Подробнее</a>
                                                             </td>
+                                                        </tr>
+                                                    {% empty %}
+                                                        <tr>
+                                                            <td colspan="3" class="text-center text-muted py-2 small">Нет сотрудников</td>
                                                         </tr>
                                                     {% endfor %}
                                                     </tbody>
@@ -127,39 +162,43 @@
                                             </div>
                                         </div>
                                     </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    {% endwith %}
-
-
-                {% endfor %}
-            {% else %}
-                {% for platoon_node in main_node.get_children %}
-                    {% with forloop.counter as one %}
-                    <div class="row justify-content-center">
-                        <div class="col-4">
-                            <h2 class="alert alert-light text-black mb-3 py-1 mt-5 text-center shadow">{{ platoon_node }}</h2>
+                                </div>
+                            {% endfor %}
                         </div>
                     </div>
-                    {% for child_node in platoon_node.get_children %}
-                        {% with forloop.counter as two %}
-                        <div class="alert alert-secondary px-5 pb-0 pt-4 justify-content-center w-75">
-                            <div class="row row-cols-2 justify-content-between">
-                                <div class="col-4">
-                                    <h2 class="alert-heading mb-3">{{ child_node }}</h2>
-                                </div>
-                                <div class="col-8">
-                                    <table class="table table-striped ">
+                </div>
+                {% endwith %}
+            {% endfor %}
+        {% else %}
+            {% for platoon_node in main_node.get_children %}
+                {% with forloop.counter as one %}
+                <div class="d-flex align-items-center my-3">
+                    <hr class="flex-grow-1 my-0 text-muted opacity-25">
+                    <span class="px-3 py-1 bg-white border rounded-pill text-muted fw-semibold small text-uppercase" style="letter-spacing: 0.5px; font-size: 0.75rem;">
+                        {{ platoon_node }}
+                    </span>
+                    <hr class="flex-grow-1 my-0 text-muted opacity-25">
+                </div>
+                {% for child_node in platoon_node.get_children %}
+                    {% with forloop.counter as two %}
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-header bg-light py-2 px-3 border-bottom d-flex justify-content-between align-items-center">
+                            <h5 class="h6 mb-0 fw-bold text-dark">{{ child_node }}</h5>
+                        </div>
+                        <div class="card-body p-3">
+                            {% if child_node.staff.all %}
+                            <div class="mb-3">
+                                <div class="text-muted small mb-2 fw-semibold text-uppercase" style="font-size: 0.72rem; letter-spacing: 0.5px;">Руководство направления</div>
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-hover align-middle mb-0 border">
                                         <tbody>
-                                        {% for kg in child_node.staff.all %}
+                                        {% for lead in child_node.staff.all %}
                                             <tr>
-                                                <th scope="row">Командир группы</th>
-                                                <td>{{ kg.get_FIO }}</td>
-                                                <td class="text-end">
-                                                    <a class="btn btn-sm btn-success" href="{% url 'create_note' slug=kg.slug %}">Добавить запись</a>
-                                                    <a class="btn btn-sm btn-warning"
-                                                       href="{% url 'view_user_notes' slug=kg.slug %}">Подробнее</a>
+                                                <td class="ps-3 text-muted small" style="width: 200px;">Руководитель направления</td>
+                                                <td class="fw-medium">{{ lead.get_FIO }}</td>
+                                                <td class="text-end pe-3">
+                                                    <a class="btn btn-sm btn-outline-success py-1 px-2 me-1" style="font-size: 0.8rem;" href="{% url 'create_note' slug=lead.slug %}">Добавить запись</a>
+                                                    <a class="btn btn-sm btn-outline-primary py-1 px-2" style="font-size: 0.8rem;" href="{% url 'view_user_notes' slug=lead.slug %}">Подробнее</a>
                                                 </td>
                                             </tr>
                                         {% endfor %}
@@ -167,48 +206,60 @@
                                     </table>
                                 </div>
                             </div>
-                            <div class="accordion accordion-flush mb-5" id="accordionFlushExample">
+                            {% endif %}
+
+                            <div class="accordion accordion-flush border rounded-2" id="accordionFlushExample{{ one }}{{ two }}">
                                 {% for node in child_node.get_children %}
                                     <div class="accordion-item">
                                         <h2 class="accordion-header" id="heading{{ one }}{{ two }}{{ forloop.counter }}">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                            <button class="accordion-button collapsed py-2 px-3" type="button" data-bs-toggle="collapse"
                                                     data-bs-target="#flush-collapse{{ one }}{{ two }}{{ forloop.counter }}" aria-expanded="false"
                                                     aria-controls="flush-collapse{{ one }}{{ two }}{{ forloop.counter }}">
-                                                <h5>
-                                                    {{ node }}
-                                                </h5>
+                                                <span class="fw-semibold text-dark" style="font-size: 0.88rem;">{{ node }}</span>
+                                                <span class="badge bg-secondary-subtle text-secondary-emphasis ms-2 small fw-normal">{{ node.staff.count }} сотр.</span>
                                             </button>
                                         </h2>
                                         <div id="flush-collapse{{ one }}{{ two }}{{ forloop.counter }}" class="accordion-collapse collapse"
-                                             aria-labelledby="flush-heading{{ one }}{{ two }}{{ forloop.counter }}" data-bs-parent="#accordionFlushExample">
-                                            <div class="accordion-body">
-                                                <table class="table table-striped ">
-                                                    <tbody>
-                                                    {% for cadet in node.staff.all|dictsort:"last_name" %}
-                                                        <tr>
-                                                            <th scope="row">{{ forloop.counter }}</th>
-                                                            <td>{{ cadet.get_FIO }}</td>
-                                                            <td class="text-end">
-                                                                <a class="btn btn-sm btn-success"
-                                                                   href="{% url 'create_note' slug=cadet.slug %}">Добавить
-                                                                    запись</a>
-                                                                <a class="btn btn-sm btn-warning"
-                                                                   href="{% url 'view_user_notes' slug=cadet.slug %}">Подробнее</a>
-                                                            </td>
-                                                        </tr>
-                                                    {% endfor %}
-                                                    </tbody>
-                                                </table>
+                                             aria-labelledby="flush-heading{{ one }}{{ two }}{{ forloop.counter }}" data-bs-parent="#accordionFlushExample{{ one }}{{ two }}">
+                                            <div class="accordion-body p-0">
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover align-middle mb-0">
+                                                        <thead class="table-light">
+                                                            <tr class="small text-muted">
+                                                                <th scope="col" class="ps-3" style="width: 50px;">#</th>
+                                                                <th scope="col">Сотрудник</th>
+                                                                <th scope="col" class="text-end pe-3">Действия</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        {% for cadet in node.staff.all|dictsort:"last_name" %}
+                                                            <tr>
+                                                                <th scope="row" class="ps-3 text-muted fw-normal small">{{ forloop.counter }}</th>
+                                                                <td class="fw-medium">{{ cadet.get_FIO }}</td>
+                                                                <td class="text-end pe-3">
+                                                                    <a class="btn btn-sm btn-outline-success py-1 px-2 me-1" style="font-size: 0.8rem;" href="{% url 'create_note' slug=cadet.slug %}">Добавить запись</a>
+                                                                    <a class="btn btn-sm btn-outline-primary py-1 px-2" style="font-size: 0.8rem;" href="{% url 'view_user_notes' slug=cadet.slug %}">Подробнее</a>
+                                                                </td>
+                                                            </tr>
+                                                        {% empty %}
+                                                            <tr>
+                                                                <td colspan="3" class="text-center text-muted py-2 small">Нет сотрудников</td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 {% endfor %}
                             </div>
                         </div>
+                    </div>
                     {% endwith %}
-                    {% endfor %}
-                {% endwith %}
                 {% endfor %}
-            {% endif %}
+                {% endwith %}
+            {% endfor %}
+        {% endif %}
     </div>
 {% endblock %}

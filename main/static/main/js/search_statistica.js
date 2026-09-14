@@ -132,7 +132,7 @@ $('#download_btn').click(function(e){
 const ctx = document.getElementById('myChart');
 
 const data = {
-    labels: ['Поощрения', 'Взыскания', 'Снятия взыскания'],
+    labels: ['Достижения', 'Замечания', 'Устранения замечаний'],
     datasets: [
         {
             data: [1, 1, 1],
