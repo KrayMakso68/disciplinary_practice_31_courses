@@ -5,6 +5,10 @@
 </p>
 
 <p align="center">
+  <a href="README.md"><b>English</b></a> | <a href="README.ru.md"><b>Русский</b></a>
+</p>
+
+<p align="center">
   <img src="https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python" />
   <img src="https://img.shields.io/badge/Django-4.2+-092E20?style=for-the-badge&logo=django&logoColor=white" alt="Django" />
   <img src="https://img.shields.io/badge/django--mptt-Trees-green?style=for-the-badge" alt="django-mptt" />
@@ -23,14 +27,14 @@ The platform solves the challenge of strictly delegating visibility and authorit
 
 ---
 
-## 🎥 Демонстрация работы / Live Demo
+## 🎥 Live Demonstration
 
 <p align="center">
   <img width="800" alt="Enterprise Workforce & Discipline Tracking System Demo" src="https://github.com/user-attachments/assets/f59e9849-2fc6-42cf-9d6e-1f7e4c570e10" />
 </p>
 
 > [!NOTE]
-> *Видеодемонстрация ключевых сценариев использования платформы: сквозная навигация по MPTT-оргструктуре подразделений, фиксация событий и поощрений сотрудников, динамический расчёт аналитики и выгрузка executive-отчётов в DOCX.*
+> *Video walkthrough of core platform workflows: end-to-end navigation across the organizational MPTT tree, recording performance events and commendations, dynamic client-side analytics aggregation, and executive DOCX report generation.*
 
 ---
 
