@@ -66,10 +66,6 @@ The platform solves the challenge of strictly delegating visibility and authorit
 * Asynchronous AJAX queries for instant period aggregation (commendations, disciplinary notes, resolution of prior penalties).
 * Dynamic donut chart visualization rendered on the client via **Chart.js**.
 
-<p align="center">
-  <img width="700" alt="Workforce Discipline Tracking Dashboard" src="https://github.com/KrayMakso68/disciplinary_practice_31_courses/assets/58968205/1b0c8078-a434-4c50-aec9-f6931cebb1fa" />
-</p>
-
 ---
 
 ## 🏛️ System Architecture & Data Flow
