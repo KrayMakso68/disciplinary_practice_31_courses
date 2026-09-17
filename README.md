@@ -26,11 +26,11 @@ The platform solves the challenge of strictly delegating visibility and authorit
 ## 🎥 Демонстрация работы / Live Demo
 
 <p align="center">
-  <img width="850" alt="Enterprise Workforce & Discipline Tracking System Demo" src="docs/demo.gif" />
+  <img width="800" alt="Enterprise Workforce & Discipline Tracking System Demo" src="https://github.com/user-attachments/assets/f59e9849-2fc6-42cf-9d6e-1f7e4c570e10" />
 </p>
 
 > [!NOTE]
-> *Видео и GIF демонстрации работы платформы (навигация по MPTT-оргструктуре, фиксация событий, расчёт аналитики и генерация DOCX-отчётов) размещены в каталоге [`docs/`](docs/).*
+> *Видеодемонстрация ключевых сценариев использования платформы: сквозная навигация по MPTT-оргструктуре подразделений, фиксация событий и поощрений сотрудников, динамический расчёт аналитики и выгрузка executive-отчётов в DOCX.*
 
 ---
 

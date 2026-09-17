@@ -7,3 +7,5 @@ __pycache__/
 db.sqlite3
 main/static/main/docx/pie.png
 main/static/main/docx/Statistica.docx
+docs/demo.gif
+docs/*.mp4
